@@ -48,6 +48,41 @@
             touch-action: none; 
         }
 
+        /* --- SPLASH SCREEN STYLES (NEW) --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #121212; /* Force dark bg initially */
+            z-index: 10000; /* Top of everything */
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+        .splash-content { text-align: center; animation: floatUp 1s ease-out; }
+        .splash-title {
+            font-size: 3.5rem; font-weight: 800; color: var(--primary);
+            letter-spacing: 2px; margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+        }
+        .splash-subtitle {
+            font-size: 1.2rem; color: #fff; letter-spacing: 6px;
+            text-transform: uppercase; font-weight: 300; opacity: 0.8;
+            margin-bottom: 40px;
+        }
+        .splash-loader {
+            width: 200px; height: 4px; background: #333;
+            border-radius: 2px; overflow: hidden; margin: 0 auto;
+        }
+        .splash-bar {
+            width: 0%; height: 100%; background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            animation: loading 2.5s ease-in-out forwards;
+        }
+        
+        @keyframes loading { 0% { width: 0%; } 50% { width: 40%; } 100% { width: 100%; } }
+        @keyframes floatUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
         /* --- HEADER --- */
         .main-header {
             height: 35px; background: var(--header-bg); border-bottom: var(--border);
@@ -222,6 +257,16 @@
 </head>
 <body>
 
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-title">FerCy Draw</div>
+            <div class="splash-subtitle">Alpha Edition</div>
+            <div class="splash-loader">
+                <div class="splash-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="new-modal">
         <div class="modal-box">
             <h2>New Project</h2>
@@ -241,7 +286,7 @@
     <input type="file" id="upload-input" style="display:none" accept="image/*" onchange="processUpload(this)">
 
     <header class="main-header">
-        <div class="brand">FerCy Draw Alpha Edition</div>
+        <div class="brand">FerCy Draw</div>
         <div class="menu-item" onclick="document.getElementById('new-modal').classList.add('open')">File</div>
         <div class="menu-item" onclick="triggerUpload()">Import</div>
         <div class="menu-item" onclick="exportImage()">Export</div>
@@ -251,7 +296,7 @@
         </div>
         <div id="autosave-status">Saving...</div>
         <div style="flex:1"></div>
-        <div class="menu-item" style="font-size:0.7rem; opacity:0.7;">v1.0</div>
+        <div class="menu-item" style="font-size:0.7rem; opacity:0.7;">v1.0 Alpha</div>
     </header>
 
     <div class="options-bar">
@@ -426,7 +471,23 @@
         let mouseX = 0, mouseY = 0;
         let lastX = 0, lastY = 0;
 
-        window.onload = () => document.getElementById('new-modal').classList.add('open');
+        // --- SPLASH SCREEN LOGIC ---
+        window.addEventListener('load', () => {
+            // Keep splash screen for 2.5 seconds (sync with CSS animation)
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('splash-hidden');
+                
+                // Show New Modal after Splash
+                document.getElementById('new-modal').classList.add('open');
+                
+                // Remove splash from DOM after fade out
+                setTimeout(() => splash.remove(), 800);
+            }, 2500);
+        });
+
+        // Removed the immediate open from window.onload since it's handled above now
+        // window.onload = () => document.getElementById('new-modal').classList.add('open');
 
         function initCanvas() {
             const w = parseInt(document.getElementById('canvas-w').value);
@@ -887,4 +948,3 @@
     </script>
 </body>
 </html>
-
