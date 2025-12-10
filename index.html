@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FerCy Draw - Studio Complete</title>
+    <title>FerCy Draw - Studio Pen Support</title>
     <style>
         /* --- THEME VARIABLES --- */
         :root {
@@ -43,6 +43,8 @@
             display: flex;
             flex-direction: column;
             user-select: none;
+            /* Mencegah gesture zoom native browser pada touch device */
+            touch-action: none; 
         }
 
         /* --- HEADER & TOP BARS --- */
@@ -59,7 +61,6 @@
         .menu-item { padding: 5px 10px; cursor: pointer; color: var(--text-muted); border-radius: 4px; transition: 0.2s;}
         .menu-item:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
         
-        /* Recording Button Style */
         .rec-btn { color: var(--text-muted); display:flex; align-items:center; gap:5px; }
         .rec-btn.recording { color: var(--rec-color); animation: pulse 1.5s infinite; font-weight: bold; }
         .rec-dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; }
@@ -76,7 +77,6 @@
             gap: 15px;
         }
 
-        /* ZOOM CONTROLS STYLE */
         .zoom-controls {
             display: flex; align-items: center; gap: 5px;
             background: rgba(255,255,255,0.05);
@@ -97,7 +97,6 @@
             position: relative;
         }
 
-        /* TOOLBAR (Left) */
         .tools-panel {
             width: 50px;
             background: var(--panel-bg);
@@ -132,6 +131,8 @@
             overflow: hidden;
             position: relative;
             cursor: default;
+            /* PENTING: Mencegah scroll saat menggambar dengan touch/pen */
+            touch-action: none; 
         }
         
         .viewport-bg {
@@ -150,6 +151,8 @@
             box-shadow: var(--canvas-shadow);
             cursor: crosshair;
             transform-origin: center center;
+            /* PENTING: Mencegah browser intervensi gesture */
+            touch-action: none; 
         }
 
         .drawing-canvas {
@@ -159,7 +162,6 @@
             image-rendering: pixelated;
         }
 
-        /* RIGHT PANEL (Properties & Layers) */
         .sidebar-right {
             width: 280px;
             background: var(--panel-bg);
@@ -169,10 +171,7 @@
             z-index: 10;
         }
 
-        .panel-section {
-            padding: 15px;
-            border-bottom: var(--border);
-        }
+        .panel-section { padding: 15px; border-bottom: var(--border); }
         .section-title {
             font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
             color: var(--text-muted); margin-bottom: 10px; font-weight: bold;
@@ -205,7 +204,6 @@
         .vis-icon:hover { color: #fff; }
         .layer-name { flex: 1; }
 
-        /* Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); z-index: 999;
@@ -230,6 +228,7 @@
             border: none; border-radius: 4px; font-weight: bold; cursor: pointer;
         }
 
+        /* Hand Tool Cursor Overrides */
         .viewport.hand-active #canvas-wrapper { cursor: grab; }
         .viewport.hand-active.panning #canvas-wrapper { cursor: grabbing; }
         
@@ -268,7 +267,7 @@
         </div>
 
         <div style="flex:1"></div>
-        <div class="menu-item" style="font-size:0.7rem; opacity:0.7;">v1.0</div>
+        <div class="menu-item" style="font-size:0.7rem; opacity:0.7;">v3.5 Pen Support</div>
     </header>
 
     <div class="options-bar">
@@ -434,56 +433,32 @@
         async function toggleRecord() {
             const btn = document.getElementById('rec-btn');
             const txt = document.getElementById('rec-text');
-
             if (!isRecording) {
                 try {
-                    // Capture Screen/Tab to handle multi-layers and zoom
-                    const stream = await navigator.mediaDevices.getDisplayMedia({
-                        video: { mediaSource: "screen" }
-                    });
-                    
+                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: { mediaSource: "screen" } });
                     mediaRecorder = new MediaRecorder(stream);
-                    
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) recordedChunks.push(e.data);
-                    };
-                    
+                    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
                     mediaRecorder.onstop = () => {
                         const blob = new Blob(recordedChunks, { type: "video/webm" });
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement("a");
-                        a.href = url;
-                        a.download = "fercy-process.webm";
-                        a.click();
+                        a.href = url; a.download = "fercy-process.webm"; a.click();
                         recordedChunks = [];
-                        
-                        // Reset UI
                         isRecording = false;
                         btn.classList.remove('recording');
                         txt.innerText = "Record";
                     };
-                    
                     mediaRecorder.start();
                     isRecording = true;
                     btn.classList.add('recording');
                     txt.innerText = "Stop Rec";
-
-                    // Handle if user stops via browser UI
-                    stream.getVideoTracks()[0].onended = () => {
-                        if(isRecording) mediaRecorder.stop();
-                    };
-
-                } catch (err) {
-                    console.error("Error recording: " + err);
-                    alert("Recording cancelled or not supported.");
-                }
+                    stream.getVideoTracks()[0].onended = () => { if(isRecording) mediaRecorder.stop(); };
+                } catch (err) { alert("Recording cancelled."); }
             } else {
                 mediaRecorder.stop();
-                // Stop tracks
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
             }
         }
-
 
         // --- TOOL SETTINGS ---
         function setTool(name) {
@@ -516,20 +491,14 @@
             layerCounter++;
             const id = layerCounter;
             const title = name || `Layer ${id}`;
-
             const canvas = document.createElement('canvas');
             canvas.width = config.width;
             canvas.height = config.height;
             canvas.className = 'drawing-canvas';
             canvas.style.zIndex = id;
             canvas.style.opacity = 1.0; 
-            
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
-            if (isBg) {
-                ctx.fillStyle = "#ffffff";
-                ctx.fillRect(0,0,config.width, config.height);
-            }
-
+            if (isBg) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,config.width, config.height); }
             document.getElementById('canvas-wrapper').appendChild(canvas);
             const layer = { id, name: title, canvas, ctx, visible: true, opacity: 1.0, history: [], historyPtr: -1 };
             layers.push(layer);
@@ -594,12 +563,16 @@
             document.getElementById('layer-op-val').innerText = val;
         }
 
-        // --- INTERACTION ---
+        // --- INTERACTION ENGINE (UPDATED FOR PEN/TOUCH) ---
         const wrapper = document.getElementById('canvas-wrapper');
         const viewport = document.getElementById('viewport');
-        viewport.addEventListener('mousedown', onMouseDown);
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
+        
+        // Changed to POINTER EVENTS for Pen Support
+        viewport.addEventListener('pointerdown', onMouseDown);
+        window.addEventListener('pointermove', onMouseMove);
+        window.addEventListener('pointerup', onMouseUp);
+        // Add pointer cancel just in case
+        window.addEventListener('pointercancel', onMouseUp);
 
         function getActiveCtx() {
             const l = layers.find(x => x.id === activeLayerId);
@@ -607,27 +580,37 @@
         }
 
         function onMouseDown(e) {
+            // Check if it is a primary button click (Left Mouse or Pen Tip)
+            if (e.isPrimary === false) return; 
+
             if (tools.current === 'hand') {
                 isPanning = true;
                 startPanX = e.clientX; startPanY = e.clientY;
-                viewport.classList.add('panning'); return;
+                viewport.classList.add('panning'); 
+                viewport.setPointerCapture(e.pointerId); // Capture pointer
+                return;
             }
             const ctx = getActiveCtx();
             if (!ctx) return;
             
             const rect = wrapper.getBoundingClientRect();
+            // Calculate coordinates based on zoom
             const x = (e.clientX - rect.left) / config.zoom;
             const y = (e.clientY - rect.top) / config.zoom;
             
             if (x < 0 || y < 0 || x > config.width || y > config.height) return;
 
             isDrawing = true;
+            viewport.setPointerCapture(e.pointerId); // Capture pointer for drawing
             startX = x; startY = y;
 
             if (tools.current === 'fill') {
                 floodFill(ctx, Math.floor(x), Math.floor(y), tools.color);
                 isDrawing = false; return;
             }
+
+            // 
+            // Note: e.pressure is available here for future pressure sensitivity features
 
             ctx.lineWidth = tools.size;
             ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -658,14 +641,31 @@
                 drawShape(ctx, startX, startY, x, y);
             } else {
                 ctx.globalCompositeOperation = tools.current === 'eraser' ? 'destination-out' : 'source-over';
-                ctx.lineTo(x, y); ctx.stroke();
+                // Use coalesced events for smoother curves if available (optional optimization)
+                if (e.getCoalescedEvents) {
+                    let events = e.getCoalescedEvents();
+                    for(let i=0; i<events.length; i++) {
+                         let cx = (events[i].clientX - rect.left) / config.zoom;
+                         let cy = (events[i].clientY - rect.top) / config.zoom;
+                         ctx.lineTo(cx, cy); 
+                         ctx.stroke();
+                    }
+                } else {
+                    ctx.lineTo(x, y); ctx.stroke();
+                }
             }
         }
 
         function onMouseUp(e) {
-            if (isPanning) { isPanning = false; viewport.classList.remove('panning'); return; }
+            if (isPanning) { 
+                isPanning = false; 
+                viewport.classList.remove('panning'); 
+                viewport.releasePointerCapture(e.pointerId);
+                return; 
+            }
             if (isDrawing) {
                 isDrawing = false;
+                viewport.releasePointerCapture(e.pointerId);
                 saveHistory(layers.find(x => x.id === activeLayerId));
             }
         }
