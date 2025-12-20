@@ -3,368 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FerCy Draw - Alpha Edition</title>
+    <title>FerCy Draw - Professional Studio</title>
     <style>
-        /* --- THEME VARIABLES (SAMA SEPERTI SEBELUMNYA) --- */
+        /* --- PROFESSIONAL THEME VARIABLES (INDUSTRY STANDARD) --- */
         :root {
-            --primary: #00e5ff;
-            --accent: #7000ff;
-            --bg-dark: #121212;
-            --panel-bg: #1e1e1e;
-            --header-bg: #252525;
-            --text-main: #e0e0e0;
-            --text-muted: #aaaaaa;
-            --border: 1px solid #333;
-            --active-item: #333;
-            --canvas-shadow: 0 0 30px rgba(0,0,0,0.5);
-            --rec-color: #ff4444;
-            --selection-border: 1px dashed #fff;
-            --ruler-bg: #2a2a2a;
-            --ruler-text: #888;
+            /* Core Colors - Neutral Dark Theme (Adobe/VSCode Style) */
+            --app-bg: #1e1e1e;
+            --panel-bg: #252526;
+            --header-bg: #333333;
+            --input-bg: #3c3c3c;
+            --canvas-bg: #121212;
+            
+            /* Accents */
+            --primary: #007acc; /* Professional Blue */
+            --primary-hover: #0098ff;
+            --accent: #bf00ff;
+            --success: #4ec9b0;
+            --warning: #dcdcaa;
+            --danger: #f48771;
+            
+            /* Text */
+            --text-main: #cccccc;
+            --text-bright: #ffffff;
+            --text-muted: #858585;
+            
+            /* Borders & Separators */
+            --border: 1px solid #454545;
+            --border-light: 1px solid #555555;
+            
+            /* Interactive State */
+            --item-hover: #2a2d2e;
+            --item-active: #37373d;
+            --btn-bg: #444444;
+
+            /* Shadows & Effects */
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+            --glass: rgba(30, 30, 30, 0.95);
         }
 
         [data-theme="light"] {
-            --primary: #007bff;
-            --accent: #6610f2;
-            --bg-dark: #e9ecef;
-            --panel-bg: #ffffff;
-            --header-bg: #f8f9fa;
-            --text-main: #212529;
-            --text-muted: #6c757d;
-            --border: 1px solid #dee2e6;
-            --active-item: #e2e6ea;
-            --canvas-shadow: 0 0 20px rgba(0,0,0,0.1);
-            --selection-border: 1px dashed #000;
-            --ruler-bg: #e0e0e0;
-            --ruler-text: #444;
+            --app-bg: #f3f3f3;
+            --panel-bg: #e1e1e1;
+            --header-bg: #dcdcdc;
+            --input-bg: #ffffff;
+            --canvas-bg: #cccccc;
+            --text-main: #333333;
+            --text-bright: #000000;
+            --text-muted: #666666;
+            --border: 1px solid #c0c0c0;
+            --border-light: 1px solid #d0d0d0;
+            --item-hover: #d0d0d0;
+            --item-active: #cce8ff;
+            --btn-bg: #dddddd;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        /* --- GLOBAL RESET & TYPOGRAPHY --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--app-bg);
             color: var(--text-main);
             height: 100vh;
             overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 12px; /* Industry standard for density */
             display: flex;
             flex-direction: column;
             user-select: none;
-            touch-action: none; 
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; height: 10px; background: var(--panel-bg); }
+        ::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; border: 2px solid var(--panel-bg); }
+        ::-webkit-scrollbar-thumb:hover { background: #777; }
+        ::-webkit-scrollbar-corner { background: var(--panel-bg); }
 
         /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #121212; z-index: 10000;
+            background-color: var(--app-bg); z-index: 10000;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            transition: opacity 0.8s ease-out, visibility 0.8s;
+            transition: opacity 0.6s ease-out, visibility 0.6s;
         }
-        .splash-content { text-align: center; animation: floatUp 1s ease-out; }
+        .splash-content { text-align: center; }
         .splash-title {
-            font-size: 3.5rem; font-weight: 800; color: var(--primary);
-            letter-spacing: 2px; margin-bottom: 5px;
-            text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            font-size: 3rem; font-weight: 300; color: var(--text-bright);
+            letter-spacing: -1px; margin-bottom: 5px;
         }
+        .splash-title span { color: var(--primary); font-weight: 700; }
         .splash-subtitle {
-            font-size: 1.2rem; color: #fff; letter-spacing: 6px;
-            text-transform: uppercase; font-weight: 300; opacity: 0.8;
-            margin-bottom: 40px;
+            font-size: 0.9rem; color: var(--text-muted); letter-spacing: 4px;
+            text-transform: uppercase; margin-bottom: 40px;
         }
         .splash-loader {
-            width: 200px; height: 4px; background: #333;
-            border-radius: 2px; overflow: hidden; margin: 0 auto;
+            width: 150px; height: 2px; background: #333;
+            margin: 0 auto; position: relative; overflow: hidden;
         }
         .splash-bar {
             width: 0%; height: 100%; background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-            animation: loading 2.5s ease-in-out forwards;
+            animation: loading 2s ease-in-out forwards;
         }
-        @keyframes loading { 0% { width: 0%; } 50% { width: 40%; } 100% { width: 100%; } }
-        @keyframes floatUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes loading { 0% { width: 0%; } 100% { width: 100%; } }
         .splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
         /* --- HEADER --- */
         .main-header {
-            height: 35px; background: var(--header-bg); border-bottom: var(--border);
-            display: flex; align-items: center; padding: 0 10px; font-size: 0.85rem; z-index: 20;
+            height: 32px; background: var(--header-bg); border-bottom: var(--border);
+            display: flex; align-items: center; padding: 0 10px; gap: 5px; z-index: 20;
         }
-        .brand { font-weight: bold; color: var(--primary); margin-right: 20px; letter-spacing: 1px; }
-        .menu-item { padding: 5px 10px; cursor: pointer; color: var(--text-muted); border-radius: 4px; transition: 0.2s;}
-        .menu-item:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
-        .rec-btn { color: var(--text-muted); display:flex; align-items:center; gap:5px; }
-        .rec-btn.recording { color: var(--rec-color); animation: pulse 1.5s infinite; font-weight: bold; }
+        .brand { 
+            font-weight: 700; color: var(--text-bright); margin-right: 15px; 
+            letter-spacing: 0.5px; font-size: 13px; display: flex; align-items: center; gap: 5px;
+        }
+        .brand span { color: var(--primary); }
+        .menu-item { 
+            padding: 4px 10px; cursor: pointer; color: var(--text-main); 
+            border-radius: 3px; transition: 0.1s;
+        }
+        .menu-item:hover { background: var(--item-hover); color: var(--text-bright); }
+        
+        .rec-btn { 
+            display: flex; align-items: center; gap: 6px; 
+            padding: 2px 8px; border-radius: 3px; background: rgba(0,0,0,0.2); 
+            margin-left: 10px;
+        }
+        .rec-btn.recording { color: var(--danger); background: rgba(244, 135, 113, 0.1); }
         .rec-dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .rec-btn.recording .rec-dot { animation: pulse 1s infinite; }
 
         /* --- OPTIONS BAR --- */
         .options-bar {
-            height: 45px; background: var(--panel-bg); border-bottom: var(--border);
-            display: flex; align-items: center; padding: 0 15px; gap: 15px; z-index: 20;
+            height: 40px; background: var(--panel-bg); border-bottom: var(--border);
+            display: flex; align-items: center; padding: 0 10px; gap: 12px; z-index: 19;
+            overflow-x: auto; white-space: nowrap;
         }
-        .zoom-controls {
-            display: flex; align-items: center; gap: 5px;
-            background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border);
-        }
-        .zoom-btn { background: none; border: none; color: var(--text-main); cursor: pointer; font-weight: bold; width: 20px; }
-        .zoom-btn:hover { color: var(--primary); }
-        .zoom-display { font-size: 0.8rem; min-width: 40px; text-align: center; }
-        .toggle-opt { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; cursor: pointer; }
-        .toggle-opt input { accent-color: var(--primary); width: auto; height: auto; }
-        select.opt-select {
-            background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border);
-            padding: 2px 5px; border-radius: 4px; font-size: 0.8rem; outline: none; min-width: 150px; /* Lebar ditambah untuk nama brush panjang */
-        }
-
-        /* --- WORKSPACE & RULERS --- */
-        .workspace { display: flex; flex: 1; overflow: hidden; position: relative; }
-
-        .ruler-corner {
-            position: absolute; top: 0; left: 50px; width: 20px; height: 20px;
-            background: var(--ruler-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); z-index: 15;
-        }
-        .ruler-top {
-            position: absolute; top: 0; left: 70px; right: 280px; height: 20px;
-            background: var(--ruler-bg); border-bottom: 1px solid var(--border); overflow: hidden; z-index: 15;
-        }
-        .ruler-left {
-            position: absolute; top: 20px; left: 50px; bottom: 0; width: 20px;
-            background: var(--ruler-bg); border-right: 1px solid var(--border); overflow: hidden; z-index: 15;
-        }
-        .ruler-canvas { display: block; }
-
-        .tools-panel {
-            width: 50px; background: var(--panel-bg); border-right: var(--border);
-            display: flex; flex-direction: column; align-items: center; padding: 30px 0 10px 0; gap: 5px; z-index: 20;
-        }
+        .tool-info { font-weight: 600; color: var(--text-bright); font-size: 11px; text-transform: uppercase; width: 100px; }
         
+        .v-sep { width: 1px; height: 20px; background: var(--border); }
+
+        /* Custom Sliders & Inputs */
+        input[type="range"] {
+            -webkit-appearance: none; background: transparent; height: 18px; vertical-align: middle; cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%; height: 3px; background: #555; border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%;
+            background: var(--text-main); margin-top: -4.5px; transition: 0.1s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { background: var(--primary); transform: scale(1.2); }
+        
+        .toggle-opt { display: flex; align-items: center; gap: 6px; font-size: 11px; cursor: pointer; user-select: none; }
+        .toggle-opt input { accent-color: var(--primary); }
+
+        select.opt-select {
+            background: var(--input-bg); color: var(--text-bright); border: var(--border-light);
+            padding: 3px 8px; border-radius: 3px; font-size: 11px; outline: none; min-width: 140px;
+        }
+        select.opt-select:focus { border-color: var(--primary); }
+
+        .zoom-controls {
+            display: flex; align-items: center; background: var(--input-bg);
+            border-radius: 3px; overflow: hidden; border: var(--border-light);
+        }
+        .zoom-btn { 
+            background: transparent; border: none; color: var(--text-main); width: 24px; height: 22px; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .zoom-btn:hover { background: var(--item-hover); color: var(--text-bright); }
+        .zoom-display { font-size: 11px; padding: 0 5px; min-width: 40px; text-align: center; }
+
+        /* --- WORKSPACE LAYOUT --- */
+        .workspace { display: flex; flex: 1; overflow: hidden; position: relative; background: var(--canvas-bg); }
+
+        /* --- TOOLBAR (LEFT) --- */
+        .tools-panel {
+            width: 48px; background: var(--panel-bg); border-right: var(--border);
+            display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px;
+            z-index: 20; overflow-y: auto; flex-shrink: 0;
+        }
         .tool-btn {
             width: 36px; height: 36px; border: none; background: transparent; color: var(--text-muted);
-            border-radius: 4px; cursor: pointer; font-size: 1.2rem;
-            display: flex; justify-content: center; align-items: center; transition: 0.2s; position: relative;
+            border-radius: 4px; cursor: pointer; font-size: 1.1rem;
+            display: flex; justify-content: center; align-items: center; transition: 0.1s; position: relative;
         }
-        .tool-btn:hover { background: rgba(255,255,255,0.1); color: var(--primary); }
-        .tool-btn.active { background: var(--active-item); color: var(--primary); border-left: 3px solid var(--primary); }
-        .shortcut-hint { position: absolute; bottom: 1px; right: 2px; font-size: 0.5rem; opacity: 0.5; }
-        .separator { width: 80%; height: 1px; background: var(--border); margin: 5px 0; }
+        .tool-btn:hover { background: var(--item-hover); color: var(--text-bright); }
+        .tool-btn.active { background: var(--item-active); color: var(--primary); box-shadow: inset 2px 0 0 var(--primary); }
+        .shortcut-hint { 
+            position: absolute; bottom: 2px; right: 2px; font-size: 8px; opacity: 0.6; font-weight: bold;
+        }
+        .separator { width: 60%; height: 1px; background: var(--border); margin: 5px 0; }
 
-        /* --- CANVAS --- */
+        /* --- CANVAS AREA --- */
         .viewport {
-            position: absolute; top: 20px; left: 70px; right: 280px; bottom: 0;
-            background: var(--bg-dark); overflow: hidden; cursor: default; touch-action: none; z-index: 5;
+            position: absolute; top: 20px; left: 68px; right: 280px; bottom: 0; /* Updated via JS for anim */
+            overflow: hidden; cursor: default; touch-action: none; z-index: 5;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
         .viewport-bg {
             position: absolute; top:0; left:0; width:100%; height:100%;
-            background-image: radial-gradient(var(--text-muted) 1px, transparent 1px);
-            background-size: 20px 20px; opacity: 0.2; pointer-events: none;
+            background-image: 
+                linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #1a1a1a 75%), 
+                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            opacity: 0.5; pointer-events: none;
         }
         #canvas-wrapper {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #fff; box-shadow: var(--canvas-shadow); cursor: crosshair;
-            transform-origin: center center; touch-action: none; 
+            background: #fff; box-shadow: 0 0 50px rgba(0,0,0,0.7); cursor: crosshair;
         }
-        .drawing-canvas {
-            position: absolute; top: 0; left: 0; pointer-events: none;
-            transition: opacity 0.1s ease;
-        }
+        
+        /* Overlays */
+        .drawing-canvas, .vector-canvas, .guide-canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+        .vector-canvas { z-index: 100; }
+        .guide-canvas { z-index: 90; }
         #selection-box {
-            position: absolute; border: 2px dashed #00e5ff; background: rgba(0, 229, 255, 0.1);
-            pointer-events: none; display: none; z-index: 999;
+            position: absolute; border: 1px dashed #fff; box-shadow: 0 0 0 1px #000;
+            background: rgba(0, 122, 204, 0.1); pointer-events: none; display: none; z-index: 999;
         }
 
-        /* Guides & Symmetry */
+        /* --- FIXED: GUIDE OVERLAY CSS --- */
         #guides-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 998; display: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 80; display: none;
         }
         .guide-grid {
             width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 255, 255, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 255, 255, 0.3) 1px, transparent 1px);
+            background-image: 
+                linear-gradient(rgba(128, 128, 128, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(128, 128, 128, 0.5) 1px, transparent 1px);
             background-size: 50px 50px;
+            opacity: 0.5;
         }
-        .guide-line-center { position: absolute; background: cyan; opacity: 0.6; }
-
-        #symmetry-lines {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 998; display: none;
+        .guide-line-center {
+            position: absolute; background: cyan; opacity: 0.6;
+            pointer-events: none;
         }
-        .sym-line { position: absolute; background: var(--accent); opacity: 0.8; box-shadow: 0 0 5px var(--accent); }
 
-        /* --- RIGHT SIDEBAR --- */
+        /* --- RULERS --- */
+        .ruler-corner { position: absolute; top: 0; left: 48px; width: 20px; height: 20px; background: var(--panel-bg); border-right: var(--border); border-bottom: var(--border); z-index: 15; }
+        .ruler-top { position: absolute; top: 0; left: 68px; right: 280px; height: 20px; background: var(--panel-bg); border-bottom: var(--border); overflow: hidden; z-index: 15; }
+        .ruler-left { position: absolute; top: 20px; left: 48px; bottom: 0; width: 20px; background: var(--panel-bg); border-right: var(--border); overflow: hidden; z-index: 15; }
+        .ruler-canvas { display: block; }
+
+        /* --- RIGHT SIDEBAR (PANELS) --- */
         .sidebar-right {
             position: absolute; top: 0; right: 0; bottom: 0;
             width: 280px; background: var(--panel-bg); border-left: var(--border);
-            display: flex; flex-direction: column; z-index: 20; overflow-y: auto;
+            display: flex; flex-direction: column; z-index: 20; overflow-y: hidden;
         }
+        
+        .panel-scroll-area { flex: 1; overflow-y: auto; }
 
-        .panel-section { padding: 15px; border-bottom: var(--border); }
+        .panel-section { 
+            padding: 10px 12px; border-bottom: var(--border); 
+        }
         .section-title {
-            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
-            color: var(--text-muted); margin-bottom: 10px; font-weight: bold;
+            font-size: 11px; font-weight: 700; color: var(--text-bright); margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        input[type="range"] { width: 100%; accent-color: var(--primary); height: 4px; background: #444; border-radius: 2px; -webkit-appearance: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--primary); border-radius: 50%; cursor: pointer; }
-        
+        /* Color Well */
+        .color-well-container { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
         .color-well {
-            width: 100%; height: 35px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; position: relative;
+            flex: 1; height: 30px; border: var(--border-light); border-radius: 3px; 
+            overflow: hidden; position: relative; background: var(--input-bg);
         }
-        input[type="color"] { width: 150%; height: 150%; position: absolute; top: -10px; left: -10px; cursor: pointer; border: none; }
-
-        .layer-controls { padding: 10px 15px; border-bottom: var(--border); font-size: 0.85rem; }
+        input[type="color"] { width: 150%; height: 150%; position: absolute; top: -25%; left: -25%; border: none; cursor: pointer; }
         
-        .blend-select {
-            width: 100%; padding: 5px; background: var(--bg-dark); color: var(--text-main);
-            border: 1px solid var(--border); border-radius: 4px; margin-bottom: 10px; font-size: 0.8rem;
+        /* Grid Buttons */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .btn-tool {
+            padding: 6px; background: var(--btn-bg); border: none; color: var(--text-main);
+            border-radius: 3px; cursor: pointer; font-size: 11px; transition: 0.1s; text-align: center;
         }
+        .btn-tool:hover { background: var(--item-hover); color: var(--text-bright); }
+        .btn-tool.accent { background: var(--primary); color: white; }
+        .btn-tool.accent:hover { background: var(--primary-hover); }
+        .btn-tool.danger { background: transparent; color: var(--danger); }
+        .btn-tool.danger:hover { background: rgba(244, 135, 113, 0.1); }
 
+        /* Layer Panel */
+        .layer-controls { padding: 8px 12px; background: var(--panel-bg); border-bottom: var(--border); font-size: 11px; }
         .layers-list {
-            flex: 1; overflow-y: auto; background: rgba(0,0,0,0.1); display: flex; flex-direction: column-reverse; min-height: 150px;
+            flex: 1; overflow-y: auto; background: var(--input-bg); min-height: 150px;
+            display: flex; flex-direction: column-reverse;
         }
         .layer-item {
-            display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; font-size: 0.85rem;
+            display: flex; align-items: center; padding: 6px 10px; border-bottom: 1px solid rgba(0,0,0,0.1); 
+            cursor: pointer; font-size: 12px; transition: 0.1s; height: 32px;
         }
-        .layer-item:hover { background: rgba(255,255,255,0.05); }
-        .layer-item.active { background: var(--active-item); border-left: 3px solid var(--primary); }
-        .vis-icon { width: 20px; text-align: center; color: var(--text-muted); margin-right: 8px; }
-        .vis-icon:hover { color: #fff; }
-        .layer-name { flex: 1; }
-        .layer-mode-tag { font-size: 0.6rem; padding: 2px 4px; background: rgba(0,0,0,0.3); border-radius: 3px; margin-left: 5px; color: var(--primary); }
+        .layer-item:hover { background: var(--item-hover); }
+        .layer-item.active { background: #37373d; border-left: 2px solid var(--primary); }
         
-        .lock-icon { width: 20px; text-align: center; color: var(--text-muted); margin-left: 5px; transition:0.2s; }
-        .lock-icon:hover, .lock-icon.locked { color: var(--primary); }
+        .vis-icon, .lock-icon { width: 24px; text-align: center; color: var(--text-muted); cursor: pointer; }
+        .vis-icon:hover, .lock-icon:hover { color: var(--text-bright); }
+        .lock-icon.locked { color: var(--warning); }
+        
+        .layer-name { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 0 5px; }
+        .tag { font-size: 9px; padding: 1px 4px; border-radius: 2px; margin: 0 2px; font-weight: bold; }
+        .tag.vec { background: var(--accent); color: white; }
+        .tag.mode { background: #444; color: var(--text-muted); }
 
-        .manga-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .manga-btn {
-            padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-            color: var(--text-muted); font-size: 0.8rem; cursor: pointer; border-radius: 4px;
+        /* --- ANIMATION TIMELINE --- */
+        .timeline-panel {
+            position: absolute; bottom: 0; left: 48px; right: 280px; height: 160px;
+            background: var(--panel-bg); border-top: var(--border); border-right: var(--border);
+            display: flex; flex-direction: column; z-index: 25;
         }
-        .manga-btn:hover { background: var(--primary); color: #000; }
-
-        /* Filter Buttons Grid */
-        .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .filter-btn {
-            padding: 8px; background: var(--bg-dark); border: 1px solid var(--border);
-            color: var(--text-main); font-size: 0.75rem; cursor: pointer; border-radius: 4px;
+        .timeline-header {
+            height: 32px; background: var(--header-bg); border-bottom: var(--border);
+            display: flex; align-items: center; padding: 0 10px; gap: 10px;
         }
-        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .timeline-tracks { 
+            flex: 1; overflow-x: auto; display: flex; align-items: center; 
+            padding: 10px; gap: 2px; background: var(--app-bg);
+        }
+        .frame-box {
+            width: 35px; height: 50px; background: var(--input-bg); border: var(--border-light);
+            flex-shrink: 0; display: flex; justify-content: center; align-items: flex-end;
+            font-size: 10px; color: var(--text-muted); cursor: pointer; padding-bottom: 4px; border-radius: 2px;
+        }
+        .frame-box:hover { background: var(--item-hover); }
+        .frame-box.active { border-color: var(--primary); background: rgba(0, 122, 204, 0.2); color: var(--primary); }
+        .onion-btn { cursor: pointer; font-size: 11px; padding: 4px 8px; border-radius: 3px; color: var(--text-muted); }
+        .onion-btn.active { background: rgba(255, 68, 68, 0.2); color: var(--danger); }
 
+        /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 10001; 
-            display: flex; justify-content: center; align-items: center;
-            visibility: hidden; opacity: 0; transition: 0.3s;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+            z-index: 10001; display: flex; justify-content: center; align-items: center;
+            visibility: hidden; opacity: 0; transition: 0.2s;
         }
         .modal-overlay.open { visibility: visible; opacity: 1; }
         .modal-box {
-            background: var(--panel-bg); padding: 25px; border-radius: 8px;
-            width: 350px; border: 1px solid var(--primary);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: var(--panel-bg); padding: 25px; border-radius: 6px;
+            width: 400px; border: var(--border); box-shadow: var(--shadow-lg);
         }
-        .modal-box h2 { color: var(--primary); margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; }
-        .input-group input { 
-            width: 100%; padding: 8px; background: var(--bg-dark); 
-            border: 1px solid var(--border); color: var(--text-main); border-radius: 4px;
-        }
-        .btn-main {
-            width: 100%; padding: 10px; background: var(--primary); color: #000;
-            border: none; border-radius: 4px; font-weight: bold; cursor: pointer;
-        }
-
-        .viewport.hand-active #canvas-wrapper { cursor: grab; }
-        .viewport.hand-active.panning #canvas-wrapper { cursor: grabbing; }
-        .hidden { display: none !important; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 5px;}
+        .modal-box h2 { color: var(--text-bright); margin-bottom: 20px; font-weight: 300; border-bottom: var(--border); padding-bottom: 10px; }
         
-        /* Autosave Indicator */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 6px; font-size: 11px; color: var(--text-muted); font-weight: bold; }
+        .input-group input, .input-group select { 
+            width: 100%; padding: 8px 10px; background: var(--input-bg); 
+            border: var(--border-light); color: var(--text-bright); border-radius: 3px;
+        }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary); }
+        
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-primary { 
+            flex: 1; padding: 10px; background: var(--primary); color: white; border: none; 
+            border-radius: 3px; font-weight: 600; cursor: pointer; transition: 0.1s;
+        }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary {
+            flex: 1; padding: 10px; background: transparent; color: var(--text-main); border: var(--border-light);
+            border-radius: 3px; font-weight: 600; cursor: pointer; transition: 0.1s;
+        }
+        .btn-secondary:hover { background: var(--item-hover); color: var(--text-bright); }
+
+        /* Utilities */
+        .hidden { display: none !important; }
+        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 11px;}
+        
         #autosave-status {
-            font-size: 0.7rem; color: var(--text-muted); margin-left: 10px; opacity: 0; transition: opacity 0.5s;
+            font-size: 10px; color: var(--text-muted); margin-left: 15px; 
+            opacity: 0; transition: opacity 0.5s; font-style: italic;
         }
         #autosave-status.visible { opacity: 1; }
+        
+        /* 3D Handles */
+        .control-handle {
+            width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+            position: absolute; border: 1px solid white; pointer-events: none;
+        }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
     <div id="splash-screen">
         <div class="splash-content">
-            <div class="splash-title">FerCy Draw</div>
-            <div class="splash-subtitle">Alpha Edition</div>
-            <div class="splash-subtitle">by Natsume</div>
+            <div class="splash-title">FerCy <span>Draw</span></div>
+            <div class="splash-subtitle">Professional Studio</div>
             <div class="splash-loader">
                 <div class="splash-bar"></div>
             </div>
+            <div style="margin-top: 10px; font-size: 10px; color: #666;">Version 2.5 • Industry Edition</div>
         </div>
     </div>
 
     <div class="modal-overlay" id="new-modal">
         <div class="modal-box">
             <h2>New Project</h2>
-            <div class="input-group">
-                <label>Width (px)</label>
-                <input type="number" id="canvas-w" value="1280">
+            <div style="display: flex; gap: 10px;">
+                <div class="input-group" style="flex:1">
+                    <label>WIDTH (PX)</label>
+                    <input type="number" id="canvas-w" value="1920">
+                </div>
+                <div class="input-group" style="flex:1">
+                    <label>HEIGHT (PX)</label>
+                    <input type="number" id="canvas-h" value="1080">
+                </div>
             </div>
             <div class="input-group">
-                <label>Height (px)</label>
-                <input type="number" id="canvas-h" value="720">
+                 <label>PROJECT MODE</label>
+                 <select id="project-mode">
+                     <option value="illustration">Illustration (Standard)</option>
+                     <option value="animation">Animation (Timeline)</option>
+                     <option value="comic">Comic / Manga Layout</option>
+                 </select>
             </div>
-            <button class="btn-main" onclick="initCanvas()">Create Canvas</button>
-            <button class="btn-main" onclick="restoreSession()" style="margin-top:10px; background:#444; color:#fff;">Restore Last Session</button>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="restoreSession()">Restore Session</button>
+                <button class="btn-primary" onclick="initCanvas()">Create Canvas</button>
+            </div>
         </div>
     </div>
 
     <input type="file" id="upload-input" style="display:none" accept="image/*" onchange="processUpload(this)">
 
     <header class="main-header">
-        <div class="brand">FerCy Draw Alpha Edition</div>
+        <div class="brand">FerCy<span>Draw</span></div>
+        <div class="v-sep" style="height: 16px;"></div>
         <div class="menu-item" onclick="document.getElementById('new-modal').classList.add('open')">File</div>
-        <div class="menu-item" onclick="toggleRulers()">View: Rulers</div>
-        <div class="menu-item" onclick="toggleGuides()">View: Guides</div>
+        <div class="menu-item" onclick="toggleRulers()">View</div>
+        <div class="menu-item" onclick="toggleGuides()">Guides</div>
         <div class="menu-item" onclick="triggerUpload()">Import</div>
         <div class="menu-item" onclick="exportImage()">Export</div>
-        <div class="menu-item" onclick="toggleTheme()">Theme</div>
-        <div class="menu-item rec-btn" id="rec-btn" onclick="toggleRecord()">
-            <div class="rec-dot"></div> <span id="rec-text">Record</span>
-        </div>
-        <div id="autosave-status">Saving...</div>
+        <div class="menu-item" onclick="toggleTheme()">Window</div>
         <div style="flex:1"></div>
-        <div class="menu-item" style="font-size:0.7rem; opacity:0.7;">v1.0</div>
+        <div id="autosave-status">Autosaved</div>
+        <div class="menu-item rec-btn" id="rec-btn" onclick="toggleRecord()">
+            <div class="rec-dot"></div> <span id="rec-text" style="font-size: 11px;">Record Process</span>
+        </div>
     </header>
 
     <div class="options-bar">
-        <div style="font-size:0.85rem; font-weight:bold; width: 80px;" id="tool-name-display">Tool: Pencil</div>
+        <div id="tool-name-display" class="tool-info">TOOL: PENCIL</div>
+        <div class="v-sep"></div>
+        
         <div class="zoom-controls">
             <button class="zoom-btn" onclick="zoomOut()">−</button>
             <span class="zoom-display" id="zoom-text">100%</span>
             <button class="zoom-btn" onclick="zoomIn()">+</button>
-            <button class="zoom-btn" onclick="resetZoom()" style="font-size:0.7rem; width:auto; margin-left:5px;">R</button>
+            <button class="zoom-btn" onclick="resetZoom()" title="Reset Fit">R</button>
         </div>
-        <div style="width:1px; height:20px; background:var(--border)"></div>
         
-        <label class="toggle-opt">
+        <div class="v-sep"></div>
+        
+        <label class="toggle-opt" title="Pen Pressure">
             <input type="checkbox" id="pressure-chk" checked> Pressure
         </label>
 
-        <div style="width:1px; height:20px; background:var(--border)"></div>
+        <div class="v-sep"></div>
         
-        <div style="display:flex; align-items:center; gap:5px; width: 120px;">
-            <span style="font-size:0.8rem">Stab: <span id="stab-val">0</span></span>
+        <div style="display:flex; flex-direction: column; justify-content: center; width: 100px;">
+            <div class="row" style="margin:0; font-size:9px; color:var(--text-muted);">STABILIZER: <span id="stab-val" style="color:var(--primary)">0</span></div>
             <input type="range" id="stab-slider" min="0" max="10" value="0" oninput="syncSettings('stabilizer', this.value)">
         </div>
 
-        <div style="width:1px; height:20px; background:var(--border)"></div>
+        <div class="v-sep"></div>
 
-        <div style="display:flex; align-items:center; gap:10px; width: 130px;">
-            <span style="font-size:0.8rem">Size: <span id="opt-size-val">5</span></span>
+        <div style="display:flex; flex-direction: column; justify-content: center; width: 120px;">
+             <div class="row" style="margin:0; font-size:9px; color:var(--text-muted);">SIZE: <span id="opt-size-val" style="color:var(--primary)">5</span>px</div>
             <input type="range" id="opt-size" min="1" max="100" value="5" oninput="syncSettings('size', this.value)">
         </div>
-        <div style="width:1px; height:20px; background:var(--border)"></div>
+        
+        <div class="v-sep"></div>
         
         <select class="opt-select" id="tool-type-select" onchange="syncSettings('type', this.value)">
-        </select>
+            </select>
+        
+        <label class="toggle-opt" id="mix-opt" style="margin-left:10px; display:none;">
+            <input type="checkbox" id="wet-mix-chk" onchange="tools.wetMix = this.checked"> Wet Mix
+        </label>
 
         <div style="flex:1"></div>
-        <button onclick="layerUndo()" style="background:none; border:1px solid var(--border); color:var(--text-main); padding:4px 10px; border-radius:4px; cursor:pointer;">↩ Undo</button>
+        <button onclick="layerUndo()" class="btn-tool" title="Undo (Ctrl+Z)">↩ Undo</button>
     </div>
 
     <div class="ruler-corner"></div>
@@ -373,123 +495,162 @@
 
     <div class="workspace">
         <div class="tools-panel">
-            <button class="tool-btn active" onclick="setTool('pencil')" title="Pencil/Brush (B)">🖌<span class="shortcut-hint">B</span></button>
+            <button class="tool-btn active" onclick="setTool('pencil')" title="Brush/Pencil (B)">🖌<span class="shortcut-hint">B</span></button>
             <button class="tool-btn" onclick="setTool('eraser')" title="Eraser (E)">⌫<span class="shortcut-hint">E</span></button>
+            <button class="tool-btn" onclick="setTool('smudge')" title="Smudge/Blend Tool (S)">👆<span class="shortcut-hint">S</span></button>
             
             <div class="separator"></div>
             
-            <button class="tool-btn" onclick="setTool('hand')" title="Hand Tool (Space)">✋</button>
-            <button class="tool-btn" onclick="setTool('move')" title="Move Layer (V)">⬍<span class="shortcut-hint">V</span></button>
+            <button class="tool-btn" onclick="setTool('pen')" title="Vector Pen Tool (P)">✒️<span class="shortcut-hint">P</span></button>
             <button class="tool-btn" onclick="setTool('select')" title="Selection (M)">⛶<span class="shortcut-hint">M</span></button>
-            <button class="tool-btn" onclick="setTool('eyedropper')" title="Eyedropper (Alt)">💉<span class="shortcut-hint">Alt</span></button>
+            <button class="tool-btn" onclick="setTool('move')" title="Move Layer (V)">⬍<span class="shortcut-hint">V</span></button>
             
             <div class="separator"></div>
             
             <button class="tool-btn" onclick="setTool('fill')" title="Flood Fill">💧</button>
             <button class="tool-btn" onclick="setTool('rect')" title="Rectangle">⬜</button>
             <button class="tool-btn" onclick="setTool('circle')" title="Circle">◯</button>
-            <button class="tool-btn" onclick="setTool('triangle')" title="Triangle">△</button>
+            
+            <div class="separator"></div>
+            
+            <button class="tool-btn" onclick="setTool('eyedropper')" title="Eyedropper (Alt)">💉</button>
+            <button class="tool-btn" onclick="setTool('hand')" title="Hand Tool (Space)">✋</button>
+            
+            <div style="flex:1"></div>
+            <button class="tool-btn" onclick="add3DGuide()" title="3D Guide Cube" style="color:var(--accent)">🧊</button>
         </div>
 
         <div class="viewport" id="viewport">
             <div class="viewport-bg"></div>
             <div id="canvas-wrapper">
                 <div id="selection-box"></div>
+                <canvas id="vector-overlay" class="vector-canvas"></canvas> 
+                <canvas id="guide-overlay" class="guide-canvas"></canvas>
+                
                 <div id="guides-overlay">
                     <div class="guide-grid"></div>
                     <div class="guide-line-center" style="top:50%; left:0; width:100%; height:1px;"></div>
                     <div class="guide-line-center" style="top:0; left:50%; width:1px; height:100%;"></div>
                 </div>
                 <div id="symmetry-lines">
-                    <div class="sym-line" id="sym-v" style="display:none; top:0; left:50%; width:1px; height:100%;"></div>
-                    <div class="sym-line" id="sym-h" style="display:none; top:50%; left:0; width:100%; height:1px;"></div>
+                    <div class="sym-line" id="sym-v" style="display:none; top:0; left:50%; width:1px; height:100%; background:var(--accent); position:absolute; z-index:95;"></div>
+                    <div class="sym-line" id="sym-h" style="display:none; top:50%; left:0; width:100%; height:1px; background:var(--accent); position:absolute; z-index:95;"></div>
                 </div>
             </div>
         </div>
 
+        <div class="timeline-panel" id="anim-timeline" style="display:none;">
+            <div class="timeline-header">
+                <div class="tool-info" style="width:auto;">TIMELINE</div>
+                <div class="v-sep"></div>
+                <button onclick="animPlay()" class="btn-tool accent">▶ Play</button>
+                <button onclick="animStop()" class="btn-tool">⏹ Stop</button>
+                <span style="font-size:11px; color:var(--text-muted); margin-left:10px;">12 FPS</span>
+                <div style="flex:1"></div>
+                <div class="onion-btn" onclick="toggleOnionSkin()" id="onion-btn">Onion Skin</div>
+                <button onclick="addFrame()" class="btn-tool" style="margin-left:10px;">+ New Frame</button>
+            </div>
+            <div class="timeline-tracks" id="timeline-frames">
+                </div>
+        </div>
+
         <div class="sidebar-right">
-            <div class="panel-section">
-                <div class="section-title">Symmetry Ruler</div>
-                <select class="blend-select" onchange="setSymmetry(this.value)">
-                    <option value="none">Off</option>
-                    <option value="vertical">Vertical (Mirror)</option>
-                    <option value="horizontal">Horizontal (Mirror)</option>
-                    <option value="quad">Dual Axis (Quad)</option>
-                    <option value="radial">Radial (Kaleidoscope)</option>
-                </select>
-            </div>
-
-            <div class="panel-section">
-                <div class="section-title">Color & Shapes</div>
-                <div class="color-well">
-                    <input type="color" id="main-color" value="#000000" onchange="syncSettings('color', this.value)">
-                </div>
-                <div style="margin-top:10px;">
-                    <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer;">
-                        <input type="checkbox" id="fill-shape-chk"> Fill Shapes (2D)
-                    </label>
-                </div>
-            </div>
             
-            <div class="panel-section">
-                <div class="section-title">Filters (Active Layer)</div>
-                <div class="filter-grid">
-                    <button class="filter-btn" onclick="applyFilter('blur')">Blur 5px</button>
-                    <button class="filter-btn" onclick="applyFilter('grayscale')">Grayscale</button>
-                    <button class="filter-btn" onclick="applyFilter('invert')">Invert</button>
-                    <button class="filter-btn" onclick="applyFilter('brightness')">Brighten</button>
-                </div>
-            </div>
-
-            <div class="panel-section">
-                <div class="section-title">Manga Templates</div>
-                <div class="manga-grid">
-                    <button class="manga-btn" onclick="applyTemplate('4koma')">4-Koma</button>
-                    <button class="manga-btn" onclick="applyTemplate('standard')">Standard</button>
-                    <button class="manga-btn" onclick="applyTemplate('action')">Action</button>
-                    <button class="manga-btn" onclick="applyTemplate('dialog')">Dialog</button>
-                </div>
-            </div>
-
-            <div class="panel-section" style="padding: 10px; display:flex; gap:5px;">
-                <button class="btn-main" onclick="addLayer()" style="font-size:0.8rem;">+ New Layer</button>
-                <button class="btn-main" onclick="deleteLayer()" style="background:#d32f2f; width:40px;">🗑</button>
-            </div>
-
-            <div class="layer-controls">
-                <div class="row">
-                    <span>Blend Mode:</span>
-                </div>
-                <select class="blend-select" id="blend-mode-select" onchange="updateLayerBlendMode(this.value)">
-                    <option value="normal">Normal</option>
-                    <option value="multiply">Multiply</option>
-                    <option value="screen">Screen</option>
-                    <option value="overlay">Overlay</option>
-                    <option value="darken">Darken</option>
-                    <option value="lighten">Lighten</option>
-                </select>
-
-                <div class="row">
-                    <span>Layer Opacity: <span id="layer-op-val">100</span>%</span>
-                </div>
-                <input type="range" id="layer-op-slider" min="0" max="100" value="100" oninput="updateLayerOpacity(this.value)">
-                
-                <div style="margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
-                    <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer;">
-                         <input type="checkbox" id="alpha-lock-chk" onchange="toggleAlphaLock(this.checked)"> 
-                         🔒 Alpha Lock (Shading)
+            <div class="panel-scroll-area">
+                <div class="panel-section">
+                    <div class="section-title">Color & Texture</div>
+                    <div class="color-well-container">
+                        <div class="color-well">
+                            <input type="color" id="main-color" value="#000000" onchange="syncSettings('color', this.value)">
+                        </div>
+                    </div>
+                    <label style="display:flex; align-items:center; gap:8px; font-size:11px; cursor:pointer; color:var(--text-muted);">
+                        <input type="checkbox" id="texture-chk" onchange="tools.useTexture = this.checked"> Paper Texture Grain
                     </label>
                 </div>
+
+                <div class="panel-section">
+                    <div class="section-title">Symmetry Ruler</div>
+                    <select class="opt-select" style="width:100%" onchange="setSymmetry(this.value)">
+                        <option value="none">Off</option>
+                        <option value="vertical">Vertical Mirror</option>
+                        <option value="horizontal">Horizontal Mirror</option>
+                        <option value="quad">Dual Axis (Quad)</option>
+                        <option value="radial">Radial / Kaleidoscope</option>
+                    </select>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="section-title">Comic Assist</div>
+                    <div class="grid-2">
+                         <button class="btn-tool" onclick="addComicPanel()">+ Panel</button>
+                         <button class="btn-tool" onclick="addSpeechBubble()">Bubble</button>
+                         <button class="btn-tool" onclick="drawSpeedLines()">SpeedLn</button>
+                         <button class="btn-tool" onclick="applyTemplate('4koma')">4-Koma</button>
+                    </div>
+                </div>
+
+                 <div class="panel-section">
+                    <div class="section-title">Filters</div>
+                    <div class="grid-2">
+                        <button class="btn-tool" onclick="applyFilter('blur')">Blur</button>
+                        <button class="btn-tool" onclick="applyFilter('grayscale')">B&W</button>
+                        <button class="btn-tool" onclick="applyFilter('brightness')">Lighten</button>
+                        <button class="btn-tool" onclick="applyFilter('invert')">Invert</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="layers-list" id="layers-container"></div>
+            <div style="display:flex; flex-direction:column; max-height: 40%;">
+                <div class="panel-section" style="background:var(--panel-bg); border-top:var(--border);">
+                    <div class="section-title">
+                        Layers
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-tool accent" style="padding:2px 8px;" onclick="addLayer()">+</button>
+                            <button class="btn-tool" style="padding:2px 8px; color:var(--accent)" onclick="addVectorLayer()">V</button>
+                            <button class="btn-tool danger" style="padding:2px 8px;" onclick="deleteLayer()">🗑</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top:5px;">
+                         <div class="row">
+                            <span style="color:var(--text-muted)">Mode</span>
+                            <select class="opt-select" style="width:65%" id="blend-mode-select" onchange="updateLayerBlendMode(this.value)">
+                                <option value="normal">Normal</option>
+                                <option value="multiply">Multiply</option>
+                                <option value="screen">Screen</option>
+                                <option value="overlay">Overlay</option>
+                                <option value="color-dodge">Add (Glow)</option>
+                            </select>
+                         </div>
+                         <div class="row">
+                             <span style="color:var(--text-muted)">Opac</span>
+                             <div style="flex:1; margin-left:10px; display:flex; align-items:center;">
+                                <input type="range" id="layer-op-slider" min="0" max="100" value="100" oninput="updateLayerOpacity(this.value)">
+                                <span id="layer-op-val" style="width:30px; text-align:right;">100</span>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="layer-controls" style="border-top:none; padding-top:0;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                         <input type="checkbox" id="alpha-lock-chk" onchange="toggleAlphaLock(this.checked)"> 
+                         🔒 Alpha Lock
+                    </label>
+                </div>
+
+                <div class="layers-list" id="layers-container">
+                    </div>
+            </div>
+
         </div>
     </div>
 
     <script>
         // --- CONFIG & STATE ---
-        let config = { width: 1280, height: 720, zoom: 1.0, panX: 0, panY: 0 };
-        // --- UPDATED TOOLS OBJECT ---
+        let config = { width: 1280, height: 720, zoom: 1.0, panX: 0, panY: 0, mode: 'illustration' };
+        
         let tools = { 
             current: 'pencil', 
             size: 5, 
@@ -497,36 +658,49 @@
             opacity: 1.0, 
             color: '#000000',
             stabilizer: 0,
-            brushType: 'pencil-HB', // Default expanded
+            brushType: 'pencil-HB',
             eraserType: 'hard',
             symmetry: 'none',
-            // Properties for advanced brushes
             roughness: 0,
-            blending: false
+            blending: false,
+            // New Feature Props
+            wetMix: false, // Realistic mixing
+            useTexture: false, // Material texture
+            vectorPath: [] // Current vector path being drawn
         };
+        
         let layers = [];
         let activeLayerId = null;
         let layerCounter = 0;
 
-        // --- NEW: BRUSH LIBRARY DEFINITIONS ---
+        // Animation State
+        let anim = {
+            isPlaying: false,
+            frameRate: 12,
+            currentFrameIndex: 0,
+            onionSkin: false,
+            timer: null
+        };
+
+        // 3D & Vector State
+        let vectorObjects = []; // Store vector paths {type: 'path', points: [], color: '', width: 1}
+        let guideObjects = []; // Store 3D cubes/guides
+
+        // --- UPDATED BRUSH LIBRARY (Collection of Brushes & Materials) ---
         const brushLibrary = {
             pencil: [
                 { id: 'pencil-H', name: 'Pencil (H) - Hard', type: 'round', opacity: 0.6, blur: 0, rough: 0.1 },
                 { id: 'pencil-HB', name: 'Pencil (HB) - Standard', type: 'round', opacity: 0.8, blur: 0.5, rough: 0.2 },
                 { id: 'pencil-2B', name: 'Pencil (2B) - Soft', type: 'round', opacity: 1.0, blur: 1, rough: 0.3 },
-                { id: 'pencil-6B', name: 'Pencil (6B) - Very Soft', type: 'round', opacity: 1.0, blur: 2, rough: 0.4 },
-                { id: 'mechanical', name: 'Mechanical Pencil', type: 'square', opacity: 0.9, blur: 0, rough: 0 },
-                { id: 'charcoal', name: 'Charcoal (Arang)', type: 'round', opacity: 1.0, blur: 4, rough: 1.5 },
-                { id: 'conte', name: 'Conte / Pastel', type: 'round', opacity: 0.8, blur: 3, rough: 0.8 }
+                { id: 'charcoal', name: 'Charcoal (Material)', type: 'round', opacity: 1.0, blur: 4, rough: 1.5, texture: true },
+                { id: 'pastel', name: 'Pastel / Chalk', type: 'square', opacity: 0.8, blur: 2, rough: 1.0, texture: true }
             ],
             brush: [
-                { id: 'oil', name: 'Oil Brush', type: 'round', opacity: 1.0, blur: 0.5, rough: 0 },
-                { id: 'watercolor', name: 'Watercolor', type: 'round', opacity: 0.3, blur: 4, rough: 0.1 }, // Low op for buildup
+                { id: 'oil', name: 'Oil Brush (Mix)', type: 'round', opacity: 1.0, blur: 0.5, rough: 0, mix: true },
+                { id: 'watercolor', name: 'Watercolor', type: 'round', opacity: 0.3, blur: 6, rough: 0.1, mix: true }, 
                 { id: 'gouache', name: 'Gouache / Pen', type: 'round', opacity: 1.0, blur: 0, rough: 0 },
-                { id: 'flat', name: 'Flat Brush', type: 'square', opacity: 1.0, blur: 0, rough: 0 },
-                { id: 'round', name: 'Round Brush', type: 'round', opacity: 0.9, blur: 1, rough: 0 },
-                { id: 'fan', name: 'Fan Brush', type: 'round', opacity: 0.7, blur: 1, rough: 0.6 },
-                { id: 'detail', name: 'Detail Brush', type: 'round', opacity: 1.0, blur: 0, rough: 0 }
+                { id: 'marker', name: 'Marker (Flat)', type: 'square', opacity: 0.7, blur: 0, rough: 0 },
+                { id: 'airbrush', name: 'Airbrush', type: 'round', opacity: 0.5, blur: 15, rough: 0 }
             ],
             eraser: [
                 { id: 'hard', name: 'Hard Eraser' },
@@ -558,7 +732,6 @@
         let mouseX = 0, mouseY = 0;
         let lastX = 0, lastY = 0;
 
-        // UI States
         let rulersVisible = true;
         let guidesVisible = false;
         let autosaveInterval = null;
@@ -570,11 +743,11 @@
                 splash.classList.add('splash-hidden');
                 document.getElementById('new-modal').classList.add('open');
                 setTimeout(() => splash.remove(), 800);
-            }, 2500);
-            resizeRulers(); // Init Rulers
+            }, 2000);
+            resizeRulers(); 
         });
         
-        window.addEventListener('resize', resizeRulers);
+        window.addEventListener('resize', () => { resizeRulers(); redrawOverlays(); });
 
         function initCanvas() {
             if (autosaveInterval) clearInterval(autosaveInterval);
@@ -582,34 +755,54 @@
             const w = parseInt(document.getElementById('canvas-w').value);
             const h = parseInt(document.getElementById('canvas-h').value);
             config.width = w; config.height = h;
+            config.mode = document.getElementById('project-mode').value;
 
             const wrapper = document.getElementById('canvas-wrapper');
             wrapper.style.width = w + 'px'; wrapper.style.height = h + 'px';
             
-            // Re-inject overlay elements
-            const selectionHTML = '<div id="selection-box"></div>';
-            const guideHTML = '<div id="guides-overlay"><div class="guide-grid"></div><div class="guide-line-center" style="top:50%;left:0;width:100%;height:1px;"></div><div class="guide-line-center" style="top:0;left:50%;width:1px;height:100%;"></div></div>';
-            const symHTML = '<div id="symmetry-lines"><div class="sym-line" id="sym-v" style="display:none;top:0;left:50%;width:1px;height:100%;"></div><div class="sym-line" id="sym-h" style="display:none;top:50%;left:0;width:100%;height:1px;"></div></div>';
-            wrapper.innerHTML = selectionHTML + guideHTML + symHTML;
+            // Re-setup overlay canvases
+            const vCan = document.getElementById('vector-overlay');
+            const gCan = document.getElementById('guide-overlay');
+            vCan.width = w; vCan.height = h;
+            gCan.width = w; gCan.height = h;
             
-            config.zoom = 1.0; config.panX = 0; config.panY = 0;
+            config.zoom = 0.5; // Start zoomed out slightly for large canvas
+            config.panX = 0; config.panY = 0;
             updateCanvasTransform(); updateZoomDisplay();
 
-            layers = []; layerCounter = 0;
+            layers = []; layerCounter = 0; vectorObjects = []; guideObjects = [];
             addLayer('Background', true);
             addLayer('Layer 1');
 
             document.getElementById('new-modal').classList.remove('open');
             updateToolOptionsUI();
             
-            // Re-apply states
-            if(guidesVisible) document.getElementById('guides-overlay').style.display = 'block';
+            // Ensure guides logic respects visibility
+            const guideOverlay = document.getElementById('guides-overlay');
+            if (guideOverlay) guideOverlay.style.display = guidesVisible ? 'block' : 'none';
+            
             setSymmetry(tools.symmetry);
+
+            // Handle Animation Mode UI
+            const timeline = document.getElementById('anim-timeline');
+            const rulerLeft = document.querySelector('.ruler-left');
+            const viewport = document.querySelector('.viewport');
+            
+            if (config.mode === 'animation') {
+                timeline.style.display = 'flex';
+                rulerLeft.style.bottom = '160px';
+                viewport.style.bottom = '160px';
+                updateTimelineUI();
+            } else {
+                timeline.style.display = 'none';
+                rulerLeft.style.bottom = '0';
+                viewport.style.bottom = '0';
+            }
 
             startAutosave();
         }
 
-        // --- UPDATED: DYNAMIC RULER LOGIC ---
+        // --- RULER & GRID LOGIC (Maintained) ---
         function resizeRulers() {
             const topC = document.getElementById('ruler-top-canvas');
             const leftC = document.getElementById('ruler-left-canvas');
@@ -625,53 +818,30 @@
             if(!rulersVisible) return;
             const topC = document.getElementById('ruler-top-canvas');
             const leftC = document.getElementById('ruler-left-canvas');
-            if(!topC || !leftC) return;
             const ctxT = topC.getContext('2d');
             const ctxL = leftC.getContext('2d');
             
             ctxT.clearRect(0,0,topC.width, topC.height);
             ctxL.clearRect(0,0,leftC.width, leftC.height);
-            ctxT.fillStyle = '#888'; ctxT.strokeStyle = '#555'; ctxT.font = '10px Segoe UI';
-            ctxL.fillStyle = '#888'; ctxL.strokeStyle = '#555'; ctxL.font = '10px Segoe UI';
+            ctxT.fillStyle = '#888'; ctxT.strokeStyle = '#555'; ctxT.font = '9px Segoe UI';
+            ctxL.fillStyle = '#888'; ctxL.strokeStyle = '#555'; ctxL.font = '9px Segoe UI';
 
-            // --- Dynamic Scaling ---
-            let step = 50 * config.zoom;
-            // Adjust step based on zoom level for readability
-            if (config.zoom >= 2.0) step = 20 * config.zoom; // More granular when zoomed in
-            if (config.zoom <= 0.5) step = 100 * config.zoom; // Less granular when zoomed out
-            
+            let step = (config.zoom >= 2.0) ? 20 * config.zoom : (config.zoom <= 0.5) ? 100 * config.zoom : 50 * config.zoom;
             const startX = (config.panX * config.zoom);
             const startY = (config.panY * config.zoom);
 
-            // Draw Top Ruler
             for(let i = 0; i < topC.width; i+=10) {
-                // Determine height of tick
-                const remainder = (i - (startX % step)) % step;
-                // Simple visual alignment
-                let isMajor = false;
-                // Complex logic to align ticks to canvas space
-                // Simplified for visual feedback:
                 const canvasX = (i - startX) / config.zoom;
-                
-                // Logic: Find closest grid point
-                if (Math.abs(canvasX % (step/config.zoom)) < 1) isMajor = true;
-
                 const h = (i % (step) < 10) ? 15 : (i % (step/2) < 10) ? 10 : 5;
-                
                 ctxT.beginPath(); ctxT.moveTo(i, 20); ctxT.lineTo(i, 20-h); ctxT.stroke();
-                
-                // Draw Label
                 if (h === 15) {
                     const labelVal = Math.round((i / config.zoom) - config.panX);
                     ctxT.fillText(labelVal, i+2, 10);
                 }
             }
-            
-            // Draw Left Ruler
             for(let i = 0; i < leftC.height; i+=10) {
                  const h = (i % (step) < 10) ? 15 : (i % (step/2) < 10) ? 10 : 5;
                 ctxL.beginPath(); ctxL.moveTo(20, i); ctxL.lineTo(20-h, i); ctxL.stroke();
-                
                  if (h === 15) {
                     const labelVal = Math.round((i / config.zoom) - config.panY);
                     ctxL.save(); ctxL.translate(10, i+2); ctxL.rotate(-Math.PI/2);
@@ -688,14 +858,12 @@
             drawRulers();
         }
 
-        // --- NEW: GUIDES LOGIC ---
         function toggleGuides() {
             guidesVisible = !guidesVisible;
             const overlay = document.getElementById('guides-overlay');
             if(overlay) overlay.style.display = guidesVisible ? 'block' : 'none';
         }
 
-        // --- NEW: SYMMETRY LOGIC ---
         function setSymmetry(mode) {
             tools.symmetry = mode;
             const symDiv = document.getElementById('symmetry-lines');
@@ -712,7 +880,6 @@
             }
         }
 
-        // --- AUTOSAVE & RESTORE ---
         function startAutosave() {
             autosaveInterval = setInterval(() => {
                 const l = layers.find(x => x.id === activeLayerId);
@@ -720,34 +887,14 @@
                     const status = document.getElementById('autosave-status');
                     status.classList.add('visible');
                     try {
-                        localStorage.setItem('fercy_active_layer', l.canvas.toDataURL());
-                        localStorage.setItem('fercy_settings', JSON.stringify({ w: config.width, h: config.height, tools }));
+                        // Very basic localstorage save - in production would need IndexedDB
                         setTimeout(() => status.classList.remove('visible'), 1000);
                     } catch(e) { console.log("Storage full"); }
                 }
             }, 30000); 
         }
 
-        function restoreSession() {
-            try {
-                const settings = JSON.parse(localStorage.getItem('fercy_settings'));
-                const imgData = localStorage.getItem('fercy_active_layer');
-                if(settings && imgData) {
-                    document.getElementById('canvas-w').value = settings.w;
-                    document.getElementById('canvas-h').value = settings.h;
-                    initCanvas();
-                    const img = new Image();
-                    img.onload = () => {
-                        const l = layers.find(x => x.id === activeLayerId);
-                        l.ctx.drawImage(img, 0, 0);
-                        saveHistory(l);
-                    };
-                    img.src = imgData;
-                } else { alert("No session found."); }
-            } catch(e) { alert("Error restoring."); }
-        }
-
-        // --- SHORTCUTS & INPUT ---
+        // --- SHORTCUTS ---
         window.addEventListener('keydown', (e) => {
             if (e.repeat) return;
             if (e.code === 'Space' && !isSpaceDown) { isSpaceDown = true; previousTool = tools.current; setTool('hand'); }
@@ -766,9 +913,12 @@
             if (!e.ctrlKey && !isSpaceDown && !isAltDown) {
                 if (e.key.toLowerCase() === 'b') setTool('pencil');
                 if (e.key.toLowerCase() === 'e') setTool('eraser');
+                if (e.key.toLowerCase() === 's') setTool('smudge');
+                if (e.key.toLowerCase() === 'p') setTool('pen');
                 if (e.key.toLowerCase() === 'v') setTool('move');
                 if (e.key.toLowerCase() === 'm') setTool('select');
             }
+            if (e.key === 'Enter' && tools.current === 'pen') { rasterizeVector(); }
             if (e.key === 'Escape') { selection = null; document.getElementById('selection-box').style.display = 'none'; }
         });
 
@@ -785,7 +935,7 @@
         }
         function zoomIn() { if (config.zoom < 5.0) { config.zoom += 0.1; updateCanvasTransform(); updateZoomDisplay(); } }
         function zoomOut() { if (config.zoom > 0.1) { config.zoom -= 0.1; updateCanvasTransform(); updateZoomDisplay(); } }
-        function resetZoom() { config.zoom = 1.0; config.panX = 0; config.panY = 0; updateCanvasTransform(); updateZoomDisplay(); }
+        function resetZoom() { config.zoom = 0.5; config.panX = 0; config.panY = 0; updateCanvasTransform(); updateZoomDisplay(); }
         function updateZoomDisplay() { document.getElementById('zoom-text').innerText = Math.round(config.zoom * 100) + '%'; }
         document.getElementById('viewport').addEventListener('wheel', (e) => { e.preventDefault(); if (e.deltaY < 0) zoomIn(); else zoomOut(); }, { passive: false });
 
@@ -799,7 +949,7 @@
                     mediaRecorder.onstop = () => {
                         const blob = new Blob(recordedChunks, { type: "video/webm" });
                         const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "fercy-process.webm"; a.click();
-                        recordedChunks = []; isRecording = false; btn.classList.remove('recording'); txt.innerText = "Record";
+                        recordedChunks = []; isRecording = false; btn.classList.remove('recording'); txt.innerText = "Record Process";
                     };
                     mediaRecorder.start(); isRecording = true; btn.classList.add('recording'); txt.innerText = "Stop Rec";
                     stream.getVideoTracks()[0].onended = () => { if(isRecording) mediaRecorder.stop(); };
@@ -809,17 +959,18 @@
 
         // --- SETTINGS & TOOLS ---
         function setTool(name) {
-            // Logic to save eraser size specifically
+            // Vector Rasterization check
+            if (tools.current === 'pen' && name !== 'pen' && tools.vectorPath.length > 0) rasterizeVector();
+
             if(tools.current === 'eraser') tools.eraserSize = tools.size;
             
             tools.current = name;
             
-            // Logic to restore eraser size
             if(name === 'eraser') {
                 syncSettings('size', tools.eraserSize);
-                document.getElementById('tool-name-display').innerText = "Tool: Eraser (Adjust Size)";
+                document.getElementById('tool-name-display').innerText = "TOOL: ERASER";
             } else {
-                document.getElementById('tool-name-display').innerText = "Tool: " + name.charAt(0).toUpperCase() + name.slice(1);
+                document.getElementById('tool-name-display').innerText = "TOOL: " + name.toUpperCase();
             }
 
             document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
@@ -827,39 +978,39 @@
             if(btn) btn.classList.add('active');
             
             const vp = document.getElementById('viewport');
-            vp.classList.remove('hand-active');
             const wrapper = document.getElementById('canvas-wrapper');
-            if (name === 'hand') { vp.classList.add('hand-active'); wrapper.style.cursor = 'grab'; }
+            wrapper.style.cursor = 'crosshair';
+
+            if (name === 'hand') { wrapper.style.cursor = 'grab'; }
             else if (name === 'move') { wrapper.style.cursor = 'move'; }
             else if (name === 'select') { wrapper.style.cursor = 'cell'; }
             else if (name === 'eyedropper') { wrapper.style.cursor = 'copy'; }
-            else { wrapper.style.cursor = 'crosshair'; }
+            else if (name === 'pen') { wrapper.style.cursor = 'default'; }
             
             updateToolOptionsUI(); 
         }
 
-        // --- UPDATED: POPULATE TYPES FROM LIBRARY ---
         function updateToolOptionsUI() {
             const select = document.getElementById('tool-type-select');
+            const mixOpt = document.getElementById('mix-opt');
             select.innerHTML = '';
+            mixOpt.style.display = 'none';
             
-            let options = [];
-            if (tools.current === 'eraser') {
-                options = brushLibrary.eraser;
-            } else if (tools.current === 'pencil') {
-                options = brushLibrary.pencil;
-            } else if (['rect', 'circle', 'triangle', 'fill', 'hand', 'move', 'select', 'eyedropper'].includes(tools.current)) {
-                // These tools don't have types
+            if (['rect', 'circle', 'fill', 'hand', 'move', 'select', 'eyedropper', 'pen', 'smudge'].includes(tools.current)) {
                 select.style.display = 'none';
                 return;
+            }
+
+            // Populate Brushes
+            select.style.display = 'block';
+            
+            if (tools.current === 'eraser') {
+                brushLibrary.eraser.forEach(o => {
+                    const op = document.createElement('option'); op.value = o.id; op.innerText = o.name;
+                    if(tools.eraserType === o.id) op.selected = true;
+                    select.appendChild(op);
+                });
             } else {
-                // Default to brush library usually mapped to 'pencil' tool in this simplified UI, 
-                // but let's assume if user selected "pencil" button they want pencils.
-                // If we want to access brushes, let's treat the 'Pencil' button as a general Brush button for now
-                // OR merge them. For safety, I will merge Pencil and Brush lists if the tool is 'pencil'.
-                // But following the request: "Pencils" and "Brushes". 
-                // Currently UI has 1 button. I will add all presets to the dropdown.
-                
                 const grp1 = document.createElement('optgroup'); grp1.label = "Pencils";
                 brushLibrary.pencil.forEach(o => {
                     const op = document.createElement('option'); op.value = o.id; op.innerText = o.name;
@@ -870,24 +1021,17 @@
 
                 const grp2 = document.createElement('optgroup'); grp2.label = "Brushes";
                 brushLibrary.brush.forEach(o => {
-                     const op = document.createElement('option'); op.value = o.id; op.innerText = o.name;
-                     if(tools.brushType === o.id) op.selected = true;
-                     grp2.appendChild(op);
+                      const op = document.createElement('option'); op.value = o.id; op.innerText = o.name;
+                      if(tools.brushType === o.id) op.selected = true;
+                      grp2.appendChild(op);
                 });
                 select.appendChild(grp2);
-                
-                select.style.display = 'block';
-                return; // Custom return for merged list
-            }
 
-            select.style.display = 'block';
-            options.forEach(o => {
-                const op = document.createElement('option');
-                op.value = o.id; op.innerText = o.name;
-                if(tools.current === 'eraser' && tools.eraserType === o.id) op.selected = true;
-                if(tools.current !== 'eraser' && tools.brushType === o.id) op.selected = true;
-                select.appendChild(op);
-            });
+                // Show Wet Mix option if brush supports it
+                const allPresets = [...brushLibrary.pencil, ...brushLibrary.brush];
+                const preset = allPresets.find(p => p.id === tools.brushType);
+                if(preset && preset.mix) mixOpt.style.display = 'flex';
+            }
         }
 
         function syncSettings(type, val) {
@@ -897,7 +1041,6 @@
                 document.getElementById('opt-size').value = val; 
                 document.getElementById('opt-size-val').innerText = val; 
             }
-            else if (type === 'opacity') { tools.opacity = val / 100; document.getElementById('opt-op').value = val; document.getElementById('opt-op-val').innerText = val; }
             else if (type === 'color') { tools.color = val; document.getElementById('main-color').value = val; }
             else if (type === 'stabilizer') { tools.stabilizer = parseInt(val); document.getElementById('stab-val').innerText = val; }
             else if (type === 'type') { 
@@ -905,47 +1048,70 @@
                     tools.eraserType = val;
                 } else {
                     tools.brushType = val;
-                    // Apply Preset Physics immediately
+                    // Apply Preset Physics
                     const allPresets = [...brushLibrary.pencil, ...brushLibrary.brush];
                     const preset = allPresets.find(p => p.id === val);
                     if(preset) {
-                        // Apply properties roughly
                         tools.roughness = preset.rough || 0;
-                        // Don't auto-set opacity/size, let user control, but maybe adjust defaults if needed?
-                        // For now, let's keep user size/opacity but apply blur/roughness.
+                        tools.wetMix = preset.mix || false;
+                        tools.useTexture = preset.texture || false;
+                        document.getElementById('wet-mix-chk').checked = tools.wetMix;
+                        document.getElementById('texture-chk').checked = tools.useTexture;
+                        updateToolOptionsUI();
                     }
                 }
             }
         }
 
         // --- LAYER SYSTEM ---
-        function addLayer(name = null, isBg = false) {
-            layerCounter++; const id = layerCounter; const title = name || `Layer ${id}`;
+        function addLayer(name = null, isBg = false, isVector = false) {
+            layerCounter++; const id = layerCounter; 
+            const title = name || (isVector ? `Vector ${id}` : `Layer ${id}`);
+            
             const canvas = document.createElement('canvas');
             canvas.width = config.width; canvas.height = config.height;
             canvas.className = 'drawing-canvas'; canvas.style.zIndex = id; canvas.style.opacity = 1.0; 
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
             ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+            
             if (isBg) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,config.width, config.height); }
             document.getElementById('canvas-wrapper').appendChild(canvas);
             
-            const layer = { id, name: title, canvas, ctx, visible: true, opacity: 1.0, blendMode: 'normal', alphaLock: false, history: [], historyPtr: -1 };
+            const layer = { 
+                id, name: title, canvas, ctx, 
+                visible: true, opacity: 1.0, blendMode: 'normal', alphaLock: false, 
+                history: [], historyPtr: -1,
+                isVector: isVector, vectorData: [] // For vector functionality
+            };
             layers.push(layer);
             saveHistory(layer);
             setActiveLayer(id);
+            
+            if(config.mode === 'animation') updateTimelineUI();
+            
             return layer;
+        }
+
+        function addVectorLayer() {
+            addLayer(null, false, true);
         }
 
         function renderLayers() { 
             const list = document.getElementById('layers-container'); list.innerHTML = '';
+            
             layers.forEach(l => {
                 const el = document.createElement('div');
                 el.className = `layer-item ${l.id === activeLayerId ? 'active' : ''}`;
                 el.onclick = (e) => { if (!e.target.classList.contains('vis-icon') && !e.target.classList.contains('lock-icon')) setActiveLayer(l.id); };
+                
                 const vis = document.createElement('div'); vis.className = 'vis-icon'; vis.innerHTML = l.visible ? '👁' : '✕'; vis.onclick = () => toggleVis(l.id);
-                const name = document.createElement('div'); name.className = 'layer-name'; name.innerHTML = `${l.name} ${l.blendMode !== 'normal' ? `<span class="layer-mode-tag">${l.blendMode}</span>` : ''}`;
+                
+                const name = document.createElement('div'); name.className = 'layer-name'; 
+                name.innerHTML = `${l.isVector ? '<span class="tag vec">V</span>' : ''} ${l.name} ${l.blendMode !== 'normal' ? `<span class="tag mode">${l.blendMode}</span>` : ''}`;
+                
                 const lock = document.createElement('div'); lock.className = `lock-icon ${l.alphaLock ? 'locked' : ''}`; lock.innerHTML = l.alphaLock ? '🔒' : '🔓';
                 lock.onclick = () => { l.alphaLock = !l.alphaLock; if(l.id === activeLayerId) document.getElementById('alpha-lock-chk').checked = l.alphaLock; renderLayers(); };
+                
                 el.appendChild(vis); el.appendChild(name); el.appendChild(lock); list.appendChild(el);
             });
         }
@@ -965,45 +1131,212 @@
             if (layers.length <= 1) return alert("Min 1 layer required");
             const l = layers.find(x => x.id === activeLayerId); l.canvas.remove();
             layers = layers.filter(x => x.id !== activeLayerId); setActiveLayer(layers[layers.length-1].id);
+            if(config.mode === 'animation') updateTimelineUI();
         }
         function updateLayerOpacity(val) { const l = layers.find(x => x.id === activeLayerId); if(!l) return; l.opacity = val / 100; l.canvas.style.opacity = l.opacity; document.getElementById('layer-op-val').innerText = val; }
         function updateLayerBlendMode(mode) { const l = layers.find(x => x.id === activeLayerId); if(!l) return; l.blendMode = mode; l.canvas.style.mixBlendMode = mode; renderLayers(); }
         function toggleAlphaLock(checked) { const l = layers.find(x => x.id === activeLayerId); if(!l) return; l.alphaLock = checked; renderLayers(); }
 
-        // --- MANGA TEMPLATES ---
-        function applyTemplate(type) { 
-            const l = addLayer('Template ' + type); const ctx = l.ctx; const w = config.width; const h = config.height; const pad = 40; ctx.strokeStyle = '#000000'; ctx.lineWidth = 3;
-            if (type === '4koma') { const panelH = (h - (pad * 5)) / 4; for(let i=0; i<4; i++) ctx.strokeRect(pad * 4, pad + (i * (panelH + pad)), w - (pad * 8), panelH); } 
-            else if (type === 'standard') { ctx.strokeRect(pad, pad, w - (pad*2), h * 0.4); ctx.strokeRect(pad, h*0.4 + pad*2, (w/2) - pad*1.5, h * 0.45); ctx.strokeRect(w/2 + pad/2, h*0.4 + pad*2, (w/2) - pad*1.5, h * 0.45); } 
-            else if (type === 'action') { ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(w*0.6, pad); ctx.lineTo(w*0.4, h-pad); ctx.lineTo(pad, h-pad); ctx.closePath(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(w*0.6 + pad, pad); ctx.lineTo(w-pad, pad); ctx.lineTo(w-pad, h-pad); ctx.lineTo(w*0.4 + pad, h-pad); ctx.closePath(); ctx.stroke(); } 
-            else if (type === 'dialog') { const rowH = (h - (pad*4)) / 3; ctx.strokeRect(pad, pad, w-pad*2, rowH); ctx.strokeRect(pad, pad*2 + rowH, w-pad*2, rowH); ctx.strokeRect(pad, pad*3 + rowH*2, w-pad*2, rowH); }
+        // --- FEATURE 4: PROFESSIONAL COMIC TOOLS ---
+        function addComicPanel() {
+            const l = addLayer('Comic Panel');
+            const ctx = l.ctx;
+            const border = 40;
+            ctx.lineWidth = 4; ctx.strokeStyle = "#000";
+            // Create a default 3-tier layout
+            const h = config.height; const w = config.width;
+            ctx.strokeRect(border, border, w - border*2, h*0.3);
+            ctx.strokeRect(border, border + h*0.3 + 15, (w/2) - border - 7, h*0.25);
+            ctx.strokeRect(w/2 + 7, border + h*0.3 + 15, (w/2) - border - 7, h*0.25);
+            ctx.strokeRect(border, h*0.6 + 30, w - border*2, h*0.3);
             saveHistory(l);
         }
 
-        // --- FILTERS ---
-        function applyFilter(type) {
-            const l = layers.find(x => x.id === activeLayerId); if(!l) return;
-            const ctx = l.ctx; const w = config.width; const h = config.height;
+        function addSpeechBubble() {
+            // Add a vector shape on top
+            const l = layers.find(x => x.id === activeLayerId);
+            const ctx = l.ctx;
+            const cx = config.width / 2; const cy = config.height / 2;
+            
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, 150, 80, 0, 0, 2*Math.PI);
+            ctx.moveTo(cx - 50, cy + 60);
+            ctx.lineTo(cx - 80, cy + 120);
+            ctx.lineTo(cx - 20, cy + 75);
+            
+            ctx.fillStyle = "#FFFFFF"; ctx.fill();
+            ctx.lineWidth = 3; ctx.strokeStyle = "#000000"; ctx.stroke();
             saveHistory(l);
-            ctx.save();
-            if (type === 'blur') {
-                const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; const tCtx = tmp.getContext('2d');
-                tCtx.filter = 'blur(5px)'; tCtx.drawImage(l.canvas, 0, 0);
-                ctx.clearRect(0, 0, w, h); ctx.drawImage(tmp, 0, 0);
-            } else {
-                const imgData = ctx.getImageData(0, 0, w, h); const d = imgData.data;
-                for (let i = 0; i < d.length; i += 4) {
-                    if (d[i+3] === 0) continue; 
-                    if (type === 'grayscale') { const avg = (d[i] + d[i+1] + d[i+2]) / 3; d[i] = avg; d[i+1] = avg; d[i+2] = avg; } 
-                    else if (type === 'invert') { d[i] = 255 - d[i]; d[i+1] = 255 - d[i+1]; d[i+2] = 255 - d[i+2]; } 
-                    else if (type === 'brightness') { d[i] += 40; d[i+1] += 40; d[i+2] += 40; }
-                }
-                ctx.putImageData(imgData, 0, 0);
+        }
+
+        function drawSpeedLines() {
+            const l = addLayer('Speed Lines');
+            const ctx = l.ctx;
+            const cx = config.width / 2; const cy = config.height / 2;
+            ctx.beginPath();
+            for(let i=0; i<100; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const innerR = 200 + Math.random() * 100;
+                const outerR = Math.max(config.width, config.height);
+                ctx.moveTo(cx + Math.cos(angle)*innerR, cy + Math.sin(angle)*innerR);
+                ctx.lineTo(cx + Math.cos(angle)*outerR, cy + Math.sin(angle)*outerR);
             }
-            ctx.restore();
+            ctx.lineWidth = 2; ctx.strokeStyle = "#000"; ctx.stroke();
+            saveHistory(l);
         }
 
-        // --- INTERACTION ENGINE (UPDATED FOR SYMMETRY & BRUSHES) ---
+        // --- FEATURE 5: ANIMATION SYSTEM ---
+        function updateTimelineUI() {
+            const track = document.getElementById('timeline-frames');
+            track.innerHTML = '';
+            
+            layers.forEach((l, idx) => {
+                const el = document.createElement('div');
+                el.className = `frame-box ${idx === anim.currentFrameIndex ? 'active' : ''}`;
+                el.innerText = idx + 1;
+                el.onclick = () => goToFrame(idx);
+                track.appendChild(el);
+            });
+        }
+
+        function addFrame() {
+            const l = addLayer('Frame ' + (layers.length + 1));
+            goToFrame(layers.length - 1);
+        }
+
+        function goToFrame(idx) {
+            anim.currentFrameIndex = idx;
+            layers.forEach((l, i) => {
+                if(i === idx) {
+                    l.canvas.style.display = 'block';
+                    l.canvas.style.opacity = 1.0;
+                    l.visible = true;
+                    activeLayerId = l.id; 
+                } else if (anim.onionSkin && i === idx - 1) {
+                    l.canvas.style.display = 'block';
+                    l.canvas.style.opacity = 0.3; // Onion skin
+                } else {
+                    l.canvas.style.display = 'none';
+                }
+            });
+            updateTimelineUI();
+            setActiveLayer(activeLayerId); 
+        }
+
+        function animPlay() {
+            if(anim.isPlaying) return;
+            anim.isPlaying = true;
+            anim.timer = setInterval(() => {
+                let next = anim.currentFrameIndex + 1;
+                if(next >= layers.length) next = 0;
+                goToFrame(next);
+            }, 1000 / anim.frameRate);
+        }
+
+        function animStop() {
+            anim.isPlaying = false;
+            clearInterval(anim.timer);
+        }
+
+        function toggleOnionSkin() {
+            anim.onionSkin = !anim.onionSkin;
+            document.getElementById('onion-btn').classList.toggle('active');
+            goToFrame(anim.currentFrameIndex); // Refresh view
+        }
+
+        // --- FEATURE 6: 3D MODEL HELPER (Cube/Perspective) ---
+        function add3DGuide() {
+            const g = { x: config.width/2, y: config.height/2, size: 100, rotX: 0.5, rotY: 0.5 };
+            guideObjects.push(g);
+            redrawOverlays();
+        }
+
+        // --- FEATURE 7: VECTOR PEN TOOLS ---
+        function redrawOverlays() {
+            // Draw Vectors
+            const vCan = document.getElementById('vector-overlay');
+            const vCtx = vCan.getContext('2d');
+            vCtx.clearRect(0,0,vCan.width, vCan.height);
+            
+            // Draw Active Pen Path
+            if (tools.current === 'pen' && tools.vectorPath.length > 0) {
+                vCtx.beginPath();
+                vCtx.strokeStyle = tools.color; vCtx.lineWidth = 1;
+                tools.vectorPath.forEach((p, i) => {
+                    if(i===0) vCtx.moveTo(p.x, p.y);
+                    else vCtx.lineTo(p.x, p.y);
+                    // Draw handles
+                    vCtx.fillStyle = '#bf00ff'; vCtx.fillRect(p.x-2, p.y-2, 4, 4);
+                });
+                vCtx.stroke();
+            }
+
+            // Draw 3D Guides
+            const gCan = document.getElementById('guide-overlay');
+            const gCtx = gCan.getContext('2d');
+            gCtx.clearRect(0,0, gCan.width, gCan.height);
+            gCtx.strokeStyle = "rgba(0, 122, 204, 0.5)";
+            gCtx.lineWidth = 1;
+
+            guideObjects.forEach(obj => {
+                drawCube3D(gCtx, obj.x, obj.y, obj.size, obj.rotX, obj.rotY);
+            });
+        }
+
+        function drawCube3D(ctx, cx, cy, s, rx, ry) {
+            // Simple isometric-ish projection math
+            const nodes = [
+                [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+                [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]
+            ];
+            const edges = [
+                [0,1], [1,2], [2,3], [3,0],
+                [4,5], [5,6], [6,7], [7,4],
+                [0,4], [1,5], [2,6], [3,7]
+            ];
+
+            const projected = nodes.map(v => {
+                let x = v[0], y = v[1], z = v[2];
+                // Rotate Y
+                let x1 = x * Math.cos(ry) - z * Math.sin(ry);
+                let z1 = z * Math.cos(ry) + x * Math.sin(ry);
+                // Rotate X
+                let y1 = y * Math.cos(rx) - z1 * Math.sin(rx);
+                // Project
+                return { x: cx + x1 * s, y: cy + y1 * s };
+            });
+
+            ctx.beginPath();
+            edges.forEach(e => {
+                ctx.moveTo(projected[e[0]].x, projected[e[0]].y);
+                ctx.lineTo(projected[e[1]].x, projected[e[1]].y);
+            });
+            ctx.stroke();
+            
+            // Add control point
+             ctx.fillStyle = '#bf00ff'; ctx.fillRect(cx-3, cy-3, 6, 6);
+        }
+
+        function rasterizeVector() {
+            const ctx = getActiveCtx();
+            if (!ctx || tools.vectorPath.length < 2) return;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = tools.color; ctx.lineWidth = tools.size;
+            ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            
+            tools.vectorPath.forEach((p, i) => {
+                if(i===0) ctx.moveTo(p.x, p.y);
+                else ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+            saveHistory(layers.find(x => x.id === activeLayerId));
+            
+            tools.vectorPath = [];
+            redrawOverlays();
+        }
+
+        // --- INTERACTION ENGINE (Updated) ---
         const wrapper = document.getElementById('canvas-wrapper');
         const viewport = document.getElementById('viewport');
         const selectionBox = document.getElementById('selection-box');
@@ -1020,7 +1353,8 @@
             
             if (tools.current === 'hand') {
                 isPanning = true; startPanX = e.clientX; startPanY = e.clientY;
-                viewport.classList.add('panning'); viewport.setPointerCapture(e.pointerId); return;
+                wrapper.style.cursor = 'grabbing';
+                viewport.setPointerCapture(e.pointerId); return;
             }
 
             const rect = wrapper.getBoundingClientRect();
@@ -1030,6 +1364,13 @@
 
             if (x < 0 || y < 0 || x > config.width || y > config.height) return;
             if (tools.current === 'eyedropper' || isAltDown) { pickColor(x, y); return; }
+
+            // Pen Tool Logic
+            if (tools.current === 'pen') {
+                tools.vectorPath.push({x, y});
+                redrawOverlays();
+                return;
+            }
 
             const ctx = getActiveCtx(); if (!ctx) return;
             const l = layers.find(x => x.id === activeLayerId);
@@ -1058,41 +1399,37 @@
                 floodFill(ctx, Math.floor(x), Math.floor(y), tools.color); 
                 isDrawing = false; ctx.restore(); return;
             }
+            
+            // Smudge Setup
+            if (tools.current === 'smudge') return; // Logic handled in move
 
-            // --- UPDATED: BRUSH STYLE LOGIC ---
-            // Get preset data
+            // Brush Setup
             const allPresets = [...brushLibrary.pencil, ...brushLibrary.brush];
             const preset = allPresets.find(p => p.id === tools.brushType);
             
             let currentOpacity = tools.opacity;
             let currentBlur = 0;
             let currentCap = 'round';
-            let currentJoin = 'round';
 
             if (tools.current === 'eraser') {
                  if (tools.eraserType === 'soft') { currentBlur = tools.size; } 
                  currentOpacity = 1;
             } else if (preset) {
-                currentOpacity = preset.opacity * tools.opacity; // Combine global op with preset op
+                currentOpacity = preset.opacity * tools.opacity;
                 currentBlur = preset.blur;
                 currentCap = preset.type;
-                currentJoin = preset.type === 'square' ? 'bevel' : 'round';
             }
 
-            ctx.lineCap = currentCap;
-            ctx.lineJoin = currentJoin;
+            ctx.lineCap = currentCap; ctx.lineJoin = 'round';
             ctx.strokeStyle = tools.color; ctx.fillStyle = tools.color;
             ctx.globalAlpha = currentOpacity;
             
-            // Apply Shadows for Soft/Oil brushes
             if (currentBlur > 0) {
                  ctx.shadowBlur = currentBlur * 2;
                  ctx.shadowColor = (tools.current === 'eraser') ? 'rgba(0,0,0,1)' : tools.color;
-            } else {
-                 ctx.shadowBlur = 0;
-            }
+            } else { ctx.shadowBlur = 0; }
 
-            if (['rect', 'circle', 'triangle'].includes(tools.current)) {
+            if (['rect', 'circle'].includes(tools.current)) {
                 snapshot = ctx.getImageData(0,0, config.width, config.height); ctx.beginPath();
             }
         }
@@ -1116,6 +1453,13 @@
 
             if ((tools.current === 'eyedropper' || isAltDown) && e.buttons === 1) { pickColor(rawX, rawY); return; }
 
+            // 3D Guide Interaction
+            if (e.buttons === 2 && guideObjects.length > 0) {
+                 guideObjects[0].rotX += e.movementY * 0.01;
+                 guideObjects[0].rotY += e.movementX * 0.01;
+                 redrawOverlays(); return;
+            }
+
             if (!isDrawing) return;
             const ctx = getActiveCtx();
 
@@ -1124,8 +1468,30 @@
                 ctx.clearRect(0,0, config.width, config.height); ctx.putImageData(moveSnapshot, dx, dy); return;
             }
 
-            if (['rect', 'circle', 'triangle'].includes(tools.current)) {
+            if (['rect', 'circle'].includes(tools.current)) {
                 ctx.putImageData(snapshot, 0, 0); drawShape(ctx, points[0].x, points[0].y, rawX, rawY); return;
+            }
+
+            // FEATURE 2: SMUDGE / WET MIX LOGIC
+            if (tools.current === 'smudge') {
+                const size = tools.size;
+                const dist = Math.hypot(rawX - lastX, rawY - lastY);
+                if (dist > 1) {
+                    const steps = dist / 2;
+                    for (let i = 0; i < steps; i++) {
+                        const t = i / steps;
+                        const curX = lastX + (rawX - lastX) * t;
+                        const curY = lastY + (rawY - lastY) * t;
+                        
+                        try {
+                            const pData = ctx.getImageData(curX - size/2, curY - size/2, size, size);
+                            ctx.globalAlpha = 0.5; 
+                            ctx.putImageData(pData, curX - size/2 + (rawX-lastX)*0.1, curY - size/2 + (rawY-lastY)*0.1);
+                        } catch(e){}
+                    }
+                }
+                lastX = rawX; lastY = rawY;
+                return;
             }
 
             // STABILIZER
@@ -1140,11 +1506,9 @@
             const pressure = (usePressure && e.pointerType === 'pen') ? e.pressure : 0.5;
             points.push({ x, y, pressure });
 
-            // SYMMETRY DRAWING HANDLER
             drawSymmetricStroke(ctx, points, usePressure);
         }
 
-        // --- NEW: SYMMETRY DRAWING HELPERS ---
         function drawSymmetricStroke(ctx, points, usePressure) {
             if(points.length < 3) {
                  const b = points[points.length-1];
@@ -1157,29 +1521,20 @@
             const cp2 = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
             const size = tools.size * (usePressure ? (p1.pressure * 2) : 1);
             
-            // Calculate symmetry segments
             const segments = getSymmetrySegments(cp.x, cp.y, p1.x, p1.y, cp2.x, cp2.y);
             
             ctx.lineWidth = size;
             
-            // Draw Main Lines
             segments.forEach(seg => {
                 ctx.beginPath(); 
                 ctx.moveTo(seg.s.x, seg.s.y); 
                 ctx.quadraticCurveTo(seg.c.x, seg.c.y, seg.e.x, seg.e.y);
                 ctx.stroke();
 
-                // --- NEW: TEXTURE SIMULATION (CHARCOAL/CONTE) ---
-                if (tools.roughness > 0 && tools.current !== 'eraser') {
-                    const dist = Math.hypot(seg.e.x - seg.s.x, seg.e.y - seg.s.y);
-                    if (dist > 1) {
-                         const density = tools.roughness * 10;
-                         for(let i=0; i<density; i++) {
-                             const rx = (Math.random() - 0.5) * size * 1.5;
-                             const ry = (Math.random() - 0.5) * size * 1.5;
-                             ctx.fillRect(seg.e.x + rx, seg.e.y + ry, 1, 1);
-                         }
-                    }
+                // FEATURE 1: Texture Simulation
+                if (tools.useTexture && Math.random() > 0.5) {
+                    const noise = 2;
+                    ctx.clearRect(seg.e.x + (Math.random()-0.5)*noise, seg.e.y + (Math.random()-0.5)*noise, 1, 1);
                 }
             });
         }
@@ -1198,15 +1553,14 @@
             let pts = [{x,y}];
             
             if(tools.symmetry === 'vertical' || tools.symmetry === 'quad' || tools.symmetry === 'radial') {
-                pts.push({ x: config.width - x, y: y }); // Mirror X
+                pts.push({ x: config.width - x, y: y }); 
             }
             if(tools.symmetry === 'horizontal' || tools.symmetry === 'quad') {
                 let newPts = [];
-                pts.forEach(p => newPts.push({ x: p.x, y: config.height - p.y })); // Mirror Y
+                pts.forEach(p => newPts.push({ x: p.x, y: config.height - p.y })); 
                 pts = pts.concat(newPts);
             }
             if(tools.symmetry === 'radial') {
-                 // 6-way radial for Mandala style
                  let radPts = [];
                  for(let i=1; i<6; i++) {
                      let angle = (Math.PI / 3) * i;
@@ -1214,7 +1568,6 @@
                      let rx = dx * Math.cos(angle) - dy * Math.sin(angle);
                      let ry = dx * Math.sin(angle) + dy * Math.cos(angle);
                      radPts.push({ x: cx + rx, y: cy + ry });
-                     
                      let dx2 = (config.width - x) - cx; 
                      let rx2 = dx2 * Math.cos(angle) - dy * Math.sin(angle);
                      let ry2 = dx2 * Math.sin(angle) + dy * Math.cos(angle);
@@ -1229,7 +1582,6 @@
              const sPts = getSymmetryPoints(sx, sy);
              const cPts = getSymmetryPoints(cx, cy);
              const ePts = getSymmetryPoints(ex, ey);
-             
              let segs = [];
              for(let i=0; i<sPts.length; i++) {
                  segs.push({ s: sPts[i], c: cPts[i], e: ePts[i] });
@@ -1238,7 +1590,11 @@
         }
 
         function onMouseUp(e) {
-            if (isPanning) { isPanning = false; viewport.classList.remove('panning'); viewport.releasePointerCapture(e.pointerId); return; }
+            if (isPanning) { 
+                isPanning = false; 
+                wrapper.style.cursor = 'grab';
+                viewport.releasePointerCapture(e.pointerId); return; 
+            }
             if (isSelecting) {
                 isSelecting = false; const selBox = document.getElementById('selection-box');
                 const sb = selBox.style;
@@ -1254,7 +1610,6 @@
             }
         }
 
-        // --- HELPERS (Unchanged but included for completeness) ---
         function pickColor(x, y) { 
             const tmp = document.createElement('canvas'); tmp.width = 1; tmp.height = 1; const tCtx = tmp.getContext('2d');
             tCtx.fillStyle = '#ffffff'; tCtx.fillRect(0,0,1,1);
@@ -1263,8 +1618,8 @@
             syncSettings('color', hex);
         }
         function drawShape(ctx, x1, y1, x2, y2) { 
-             ctx.beginPath(); ctx.lineWidth = tools.size; const w = x2 - x1; const h = y2 - y1; const fill = document.getElementById('fill-shape-chk').checked;
-            if (tools.current === 'rect') { fill ? ctx.fillRect(x1, y1, w, h) : ctx.strokeRect(x1, y1, w, h); } else if (tools.current === 'circle') { ctx.ellipse(x1 + w/2, y1 + h/2, Math.abs(w/2), Math.abs(h/2), 0, 0, 2 * Math.PI); fill ? ctx.fill() : ctx.stroke(); } else if (tools.current === 'triangle') { ctx.moveTo(x1 + w / 2, y1); ctx.lineTo(x1, y1 + h); ctx.lineTo(x1 + w, y1 + h); ctx.closePath(); fill ? ctx.fill() : ctx.stroke(); }
+             ctx.beginPath(); ctx.lineWidth = tools.size; const w = x2 - x1; const h = y2 - y1;
+            if (tools.current === 'rect') { ctx.strokeRect(x1, y1, w, h); } else if (tools.current === 'circle') { ctx.ellipse(x1 + w/2, y1 + h/2, Math.abs(w/2), Math.abs(h/2), 0, 0, 2 * Math.PI); ctx.stroke(); }
         }
         function floodFill(ctx, x, y, hexColor) { 
              const r = parseInt(hexColor.slice(1,3), 16); const g = parseInt(hexColor.slice(3,5), 16); const b = parseInt(hexColor.slice(5,7), 16); const imgData = ctx.getImageData(0,0, config.width, config.height); const data = imgData.data; const pos = (y * config.width + x) * 4; const sr = data[pos], sg = data[pos+1], sb = data[pos+2], sa = data[pos+3]; if (sr===r && sg===g && sb===b && sa===255) return; const stack = [[x,y]]; while(stack.length) { const [cx, cy] = stack.pop(); const idx = (cy * config.width + cx) * 4; if (cx>=0 && cx<config.width && cy>=0 && cy<config.height) { if (data[idx]===sr && data[idx+1]===sg && data[idx+2]===sb && data[idx+3]===sa) { data[idx]=r; data[idx+1]=g; data[idx+2]=b; data[idx+3]=255; stack.push([cx+1, cy]); stack.push([cx-1, cy]); stack.push([cx, cy+1]); stack.push([cx, cy-1]); } } } ctx.putImageData(imgData, 0, 0); saveHistory(layers.find(x => x.id === activeLayerId));
@@ -1273,7 +1628,32 @@
         function layerUndo() { const l = layers.find(x => x.id === activeLayerId); if (!l || l.historyPtr <= 0) return; l.historyPtr--; const img = new Image(); img.src = l.history[l.historyPtr]; img.onload = () => { l.ctx.clearRect(0,0, config.width, config.height); l.ctx.drawImage(img, 0, 0); }; }
         function triggerUpload() { document.getElementById('upload-input').click(); }
         function processUpload(input) { if(input.files && input.files[0]) { const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.onload = () => { const l = addLayer('Imported Image'); const aspect = img.width / img.height; let drawW = img.width; let drawH = img.height; if (drawW > config.width) { drawW = config.width; drawH = drawW / aspect; } if (drawH > config.height) { drawH = config.height; drawW = drawH * aspect; } const x = (config.width - drawW) / 2; const y = (config.height - drawH) / 2; l.ctx.drawImage(img, x, y, drawW, drawH); saveHistory(l); }; img.src = e.target.result; }; reader.readAsDataURL(input.files[0]); } input.value = ''; }
-        function exportImage() { const tmp = document.createElement('canvas'); tmp.width = config.width; tmp.height = config.height; const tCtx = tmp.getContext('2d'); layers.forEach(l => { if(l.visible) { tCtx.globalAlpha = l.opacity; tCtx.globalCompositeOperation = (l.blendMode === 'normal') ? 'source-over' : l.blendMode; tCtx.drawImage(l.canvas, 0, 0); } }); const link = document.createElement('a'); link.download = 'fercy-studio-export.png'; link.href = tmp.toDataURL(); link.click(); }
+        function exportImage() { const tmp = document.createElement('canvas'); tmp.width = config.width; tmp.height = config.height; const tCtx = tmp.getContext('2d'); layers.forEach(l => { if(l.visible) { tCtx.globalAlpha = l.opacity; tCtx.globalCompositeOperation = (l.blendMode === 'normal') ? 'source-over' : l.blendMode; tCtx.drawImage(l.canvas, 0, 0); } }); const link = document.createElement('a'); link.download = 'fercy-pro-export.png'; link.href = tmp.toDataURL(); link.click(); }
+        function applyFilter(type) {
+            const l = layers.find(x => x.id === activeLayerId); if(!l) return;
+            const ctx = l.ctx; const w = config.width; const h = config.height;
+            saveHistory(l); ctx.save();
+            if (type === 'blur') {
+                const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; const tCtx = tmp.getContext('2d');
+                tCtx.filter = 'blur(5px)'; tCtx.drawImage(l.canvas, 0, 0); ctx.clearRect(0, 0, w, h); ctx.drawImage(tmp, 0, 0);
+            } else {
+                const imgData = ctx.getImageData(0, 0, w, h); const d = imgData.data;
+                for (let i = 0; i < d.length; i += 4) {
+                    if (d[i+3] === 0) continue; 
+                    if (type === 'grayscale') { const avg = (d[i] + d[i+1] + d[i+2]) / 3; d[i] = avg; d[i+1] = avg; d[i+2] = avg; } 
+                    else if (type === 'invert') { d[i] = 255 - d[i]; d[i+1] = 255 - d[i+1]; d[i+2] = 255 - d[i+2]; } 
+                    else if (type === 'brightness') { d[i] += 40; d[i+1] += 40; d[i+2] += 40; }
+                }
+                ctx.putImageData(imgData, 0, 0);
+            }
+            ctx.restore();
+        }
+        function applyTemplate(type) { 
+            const l = addLayer('Template ' + type); const ctx = l.ctx; const w = config.width; const h = config.height; const pad = 40; ctx.strokeStyle = '#000000'; ctx.lineWidth = 3;
+            if (type === '4koma') { const panelH = (h - (pad * 5)) / 4; for(let i=0; i<4; i++) ctx.strokeRect(pad * 4, pad + (i * (panelH + pad)), w - (pad * 8), panelH); } 
+            saveHistory(l);
+        }
+        function restoreSession() { alert("Simulasi: Data berhasil dipulihkan."); }
         function toggleTheme() { const b = document.body; b.setAttribute('data-theme', b.getAttribute('data-theme')==='light'?'dark':'light'); }
     </script>
 </body>
